@@ -124,7 +124,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'Home',
-    'ckeditor',
     "django_ckeditor_5",
     "storages",
 ]

@@ -1,5 +1,5 @@
 from django.db import models
-from ckeditor.fields import RichTextField
+# from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.text import slugify
@@ -153,7 +153,7 @@ class Blog(models.Model):
     blogtitle = models.CharField(max_length=100)
     image = models.FileField(upload_to='BlogImage')
     description = models.TextField()
-    body = RichTextField(null=True, blank=True)
+    body = CKEditor5Field(null=True, blank=True)
     date_added = models.DateField(auto_now_add=True)
 
 class Enquirys(models.Model):

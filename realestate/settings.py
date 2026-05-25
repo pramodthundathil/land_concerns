@@ -14,16 +14,6 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 import os
 from decouple import config
-from whitenoise.storage import CompressedManifestStaticFilesStorage
-
-class ForgivingManifestStaticFilesStorage(CompressedManifestStaticFilesStorage):
-    manifest_strict = False
-
-    def hashed_name(self, name, content=None, filename=None):
-        try:
-            return super().hashed_name(name, content, filename)
-        except ValueError:
-            return name
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,8 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'change-me')
 DEBUG = config('DEBUG', default=True, cast=bool)
-# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'landconcerns.in,www.landconcerns.in,localhost,127.0.0.1').split(',')
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [host.strip() for host in config('ALLOWED_HOSTS', default='landconcerns.in,www.landconcerns.in,localhost,127.0.0.1').split(',')]
 CKEDITOR_UPLOAD_PATH = 'content/ckeditor/'
 CKEDITOR_5_CONFIGS = {
     'default': {
@@ -256,12 +245,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static')
+    os.path.join(BASE_DIR, 'static')
 ]
-STATIC_ROOT = os.path.join(BASE_DIR,"newstatic")
+STATIC_ROOT = os.path.join(BASE_DIR, "newstatic")
 
-# MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default=None)
@@ -274,14 +262,13 @@ AWS_QUERYSTRING_AUTH = False
 AWS_S3_FILE_OVERWRITE = False
 
 if AWS_STORAGE_BUCKET_NAME:
-    # AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME or 'amazonaws.com'}.amazonaws.com"
     MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME or 'amazonaws.com'}.amazonaws.com/"
     STORAGES = {
         "default": {
             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         },
         "staticfiles": {
-            "BACKEND": "realestate.settings.ForgivingManifestStaticFilesStorage",
+            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
         },
     }
 else:
@@ -291,7 +278,7 @@ else:
             "BACKEND": "django.core.files.storage.FileSystemStorage",
         },
         "staticfiles": {
-            "BACKEND": "realestate.settings.ForgivingManifestStaticFilesStorage",
+            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
         },
     }
 # Email Configuration

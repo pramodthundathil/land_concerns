@@ -78,6 +78,10 @@
                         <i class="bi bi-tag-fill text-brand-gold mr-1.5"></i>
                         {{ project.project_category }}
                     </span>
+                    <span class="flex items-center">
+                        <i class="bi bi-info-circle-fill text-brand-gold mr-1.5"></i>
+                        For {{ project.purpose }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -92,10 +96,14 @@
         <div class="lg:col-span-2 space-y-10">
             
             <!-- Key Details Card -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-6">
                 <div>
                     <span class="text-xs text-slate-400 block mb-1">Category</span>
                     <span class="font-semibold text-brand-navy text-sm">{{ project.project_category }}</span>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-400 block mb-1">Purpose</span>
+                    <span class="font-semibold text-brand-navy text-sm text-brand-gold">For {{ project.purpose }}</span>
                 </div>
                 <div>
                     <span class="text-xs text-slate-400 block mb-1">Location</span>

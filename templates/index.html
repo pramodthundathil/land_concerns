@@ -229,6 +229,9 @@
                             <span class="px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full bg-brand-navy text-white shadow-md">
                                 {{ prop.project_category }}
                             </span>
+                            <span class="px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full bg-brand-green text-white shadow-md">
+                                For {{ prop.purpose }}
+                            </span>
                         </div>
                         <div class="absolute top-4 right-4 z-10">
                         </div>
@@ -251,7 +254,7 @@
                             <a href="{% url 'ProjectSingle' prop.id %}">{{ prop.project_title }}</a>
                         </h3>
                         <p class="text-slate-500 text-sm font-light line-clamp-3 mb-6">
-                            {{ prop.project_description|striptags|truncatewords:20 }}
+                            {{ prop.project_description|striptags|truncatewords:80 }}
                         </p>
                         
                         <!-- Contact Action Buttons -->

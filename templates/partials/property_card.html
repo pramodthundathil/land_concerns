@@ -50,8 +50,8 @@
             <h3 class="font-serif text-sm sm:text-base md:text-lg font-bold text-brand-navy group-hover:text-brand-blue transition-colors mb-1 sm:mb-3">
                 <a href="{% url 'ProjectSingle' prop.id %}">{{ prop.project_title }}</a>
             </h3>
-            <p class="text-slate-500 text-xs sm:text-sm font-light line-clamp-1 sm:line-clamp-3 mb-3 sm:mb-6 hidden sm:block">
-                {{ prop.project_description|striptags|truncatewords:20 }}
+            <p class="text-slate-500 text-xs sm:text-sm font-light line-clamp-3 sm:line-clamp-4 mb-3 sm:mb-6">
+                {{ prop.project_description|striptags|truncatewords:80 }}
             </p>
         </div>
         

@@ -58,7 +58,7 @@ class JobApplication(models.Model):
 
 class Projects(models.Model):
     project_title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     project_subname = models.CharField(max_length=255)
     project_description = CKEditor5Field()
     primary_image = models.FileField(upload_to="project_primary_image")
@@ -86,7 +86,7 @@ class Projects(models.Model):
     def save(self, *args, **kwargs):
         self.project_status = "Completed"
         if not self.slug:
-            self.slug = slugify(self.project_title)
+            self.slug = slugify(self.project_title)[:255]
         super().save(*args, **kwargs)
 
     def __str__(self):

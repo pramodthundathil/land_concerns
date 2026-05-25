@@ -230,6 +230,9 @@ class ProjectsForm(forms.ModelForm):
             'project_category', 'is_featured_product',
             'price', 'purpose', 'primary_image', 'gallery_images', 'media_lib', 'icon', 'order'
         ]
+        labels = {
+            'project_subname': 'Location',
+        }
         widgets = {
             'project_title': forms.TextInput(attrs={'class': 'form-control'}),
             'project_subname': forms.TextInput(attrs={'class': 'form-control'}),

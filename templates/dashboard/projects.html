@@ -11,51 +11,176 @@
             </div>
             {% endfor %}
 
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-body p-4">
-                    <a href="{% url 'project_add' %}" class="btn btn-primary m-1">Add Property</a>
-                    <!-- <a href="" class=" m-1">Go to Applications</a> -->
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <a href="{% url 'project_add' %}" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i> Add Property
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <h5 class="card-title fw-semibold mb-4">Properties</h5>
+            <!-- Filters Section -->
+            <div class="card border mb-4">
+                <div class="card-body p-4">
+                    <h6 class="fw-semibold mb-3 text-dark"><i class="bi bi-funnel-fill me-1 text-primary"></i> Filter & Search Properties</h6>
+                    <form method="GET" action="{% url 'ProjectsEdits' %}" class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Search</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent"><i class="bi bi-search text-muted"></i></span>
+                                <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Search title, location...">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label fw-semibold">Category</label>
+                            <select name="category" class="form-select">
+                                <option value="">All Categories</option>
+                                {% for val, label in categories %}
+                                    <option value="{{ val }}" {% if category == val %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label fw-semibold">Status</label>
+                            <select name="status" class="form-select">
+                                <option value="">All Statuses</option>
+                                {% for val, label in statuses %}
+                                    <option value="{{ val }}" {% if status == val %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label fw-semibold">Purpose</label>
+                            <select name="purpose" class="form-select">
+                                <option value="">All Purposes</option>
+                                {% for val, label in purposes %}
+                                    <option value="{{ val }}" {% if purpose == val %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary w-50">
+                                    <i class="bi bi-filter"></i> Filter
+                                </button>
+                                <a href="{% url 'ProjectsEdits' %}" class="btn btn-outline-secondary w-50">
+                                    Clear
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <h5 class="card-title fw-semibold mb-4">Properties List</h5>
             <div class="card">
                 <div class="card-body p-4">
-                    <table class="table table-stripped">
-                        <tr>
-                            <th>Image</th>
-                            <th>Property Title</th>
-                            <th>Order</th>
-                            <th>Action</th>
-                        </tr>
-                        {% for item in projects %}
-                        <tr>
-                            <td>
-                                {% if item.primary_image %}
-                                <img src="{{item.primary_image.url}}" width="150px" alt="">
-                                {% else %}
-                                <div class="bg-light d-flex align-items-center justify-content-center" style="width: 150px; height: 100px;">
-                                    <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
-                                </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Property Title</th>
+                                    <th>Order</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in projects %}
+                                <tr>
+                                    <td>
+                                        {% if item.primary_image %}
+                                        <img src="{{item.primary_image.url}}" width="150px" class="rounded" alt="" style="object-fit: cover; max-height: 100px;">
+                                        {% else %}
+                                        <div class="bg-light d-flex align-items-center justify-content-center rounded" style="width: 150px; height: 100px;">
+                                            <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                                        </div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="fw-semibold text-dark">{{item.project_title}}</span>
+                                        {% if item.project_subname %}
+                                        <br><small class="text-muted">{{item.project_subname}}</small>
+                                        {% endif %}
+                                        <br>
+                                        <span class="badge bg-light text-primary border me-1">{{item.project_category}}</span>
+                                        <span class="badge bg-light text-success border me-1">{{item.project_status}}</span>
+                                        <span class="badge bg-light text-info border">{{item.purpose}}</span>
+                                    </td>
+                                    <td>{{item.order}}</td>
+                                    <td>
+                                        <a href="{% url 'project_edit' item.id %}" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+                                            data-bs-title="Edit Property" class="text-info me-2" style="font-size: 20px !important;">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <a href="{%url 'DeleteProject' item.id %}"
+                                            onclick="return confirm('Are you want to delete this Property Permanently ?')"
+                                            class="text-danger" style="font-size: 20px !important;">
+                                            <i class="bi bi-trash3"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-muted">
+                                        <i class="bi bi-info-circle fs-3 d-block mb-2"></i>
+                                        No properties found matching the filter criteria.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if projects.has_other_pages %}
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center mb-0">
+                            {% if projects.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if status %}&status={{ status }}{% endif %}{% if purpose %}&purpose={{ purpose }}{% endif %}" aria-label="First">
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ projects.previous_page_number }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if status %}&status={{ status }}{% endif %}{% if purpose %}&purpose={{ purpose }}{% endif %}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled"><span class="page-link">&laquo;&laquo;</span></li>
+                            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                            {% endif %}
+
+                            {% for i in projects.paginator.page_range %}
+                                {% if projects.number == i %}
+                                <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
+                                {% elif i > projects.number|add:'-3' and i < projects.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if status %}&status={{ status }}{% endif %}{% if purpose %}&purpose={{ purpose }}{% endif %}">{{ i }}</a></li>
                                 {% endif %}
-                            </td>
-                            <td>{{item.project_title}}</td>
-                            <td>{{item.order}}</td>
-                            <td>
-                                <a href="{% url 'project_edit' item.id %}" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" data-bs-custom-class="custom-tooltip"
-                                    data-bs-title="Edit Property" class="text-info" style="font-size: 20px !important;">
-                                    <i class="bi bi-pencil-square"></i>
+                            {% endfor %}
+
+                            {% if projects.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ projects.next_page_number }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if status %}&status={{ status }}{% endif %}{% if purpose %}&purpose={{ purpose }}{% endif %}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
                                 </a>
-                                <a href="{%url 'DeleteProject' item.id %}"
-                                    onclick="return confirm('Are you want to delete this Property Permanently ?')"
-                                    class="text-danger" style="font-size: 20px !important;">
-                                    <i class="bi bi-trash3"></i>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ projects.paginator.num_pages }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if status %}&status={{ status }}{% endif %}{% if purpose %}&purpose={{ purpose }}{% endif %}" aria-label="Last">
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
                                 </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </table>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                            <li class="page-item disabled"><span class="page-link">&raquo;&raquo;</span></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
                 </div>
             </div>
 

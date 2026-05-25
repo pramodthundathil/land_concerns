@@ -280,8 +280,8 @@ def Projects_(request):
         except ValueError:
             pass
             
-    # Pagination: 6 properties per page
-    paginator = Paginator(projects, 6)
+    # Pagination: 20 properties per page
+    paginator = Paginator(projects, 20)
     page_number = request.GET.get('page')
     try:
         page_obj = paginator.page(page_number)
@@ -308,48 +308,98 @@ def ServicesPage(request):
 
 def Projects_Apartments(request):
     title = "Apartments"
-    projects = Projects.objects.filter(project_category = "Apartments").order_by("order", "-id")
+    projects_list = Projects.objects.filter(project_category="Apartments").order_by("order", "-id")
+    paginator = Paginator(projects_list, 6)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
     context = {
         "title": title,
-        "projects": projects
+        "projects": page_obj,
+        "page_obj": page_obj,
+        "is_paginated": page_obj.has_other_pages()
     }
-    return render(request,"projects.html",context)
+    return render(request, "projects.html", context)
 
 def Projects_House(request):
     title = "House"
-    projects = Projects.objects.filter(project_category = "House").order_by("order", "-id")
+    projects_list = Projects.objects.filter(project_category="House").order_by("order", "-id")
+    paginator = Paginator(projects_list, 6)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
     context = {
         "title": title,
-        "projects": projects
+        "projects": page_obj,
+        "page_obj": page_obj,
+        "is_paginated": page_obj.has_other_pages()
     }
-    return render(request,"projects.html",context)
+    return render(request, "projects.html", context)
 
 def Projects_Commercial(request):
     title = "Commercial"
-    projects = Projects.objects.filter(project_category = "Commercial").order_by("order", "-id")
+    projects_list = Projects.objects.filter(project_category="Commercial").order_by("order", "-id")
+    paginator = Paginator(projects_list, 6)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
     context = {
         "title": title,
-        "projects": projects
+        "projects": page_obj,
+        "page_obj": page_obj,
+        "is_paginated": page_obj.has_other_pages()
     }
-    return render(request,"projects.html",context)
+    return render(request, "projects.html", context)
 
 def Projects_Office(request):
     title = "Office"
-    projects = Projects.objects.filter(project_category = "Office").order_by("order", "-id")
+    projects_list = Projects.objects.filter(project_category="Office Spaces").order_by("order", "-id")
+    paginator = Paginator(projects_list, 6)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
     context = {
         "title": title,
-        "projects": projects
+        "projects": page_obj,
+        "page_obj": page_obj,
+        "is_paginated": page_obj.has_other_pages()
     }
-    return render(request,"projects.html",context)
+    return render(request, "projects.html", context)
 
 def Projects_Renovation(request):
     title = "Renovation"
-    projects = Projects.objects.filter(project_category = "Renovation").order_by("order", "-id")
+    projects_list = Projects.objects.filter(project_category="Renovation").order_by("order", "-id")
+    paginator = Paginator(projects_list, 6)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
     context = {
         "title": title,
-        "projects": projects
+        "projects": page_obj,
+        "page_obj": page_obj,
+        "is_paginated": page_obj.has_other_pages()
     }
-    return render(request,"projects.html",context)
+    return render(request, "projects.html", context)
 
 
 def ProjectSingle(request,pk):
@@ -758,12 +808,54 @@ def delete_application(request,pk):
 # --------------------------------------------------------------------------------------
 
 def ProjectsEdits(request):
-    projects = Projects.objects.all()
+    projects_list = Projects.objects.all().order_by('order', '-created_at', '-id')
+
+    q = request.GET.get('q', '')
+    category = request.GET.get('category', '')
+    status = request.GET.get('status', '')
+    purpose = request.GET.get('purpose', '')
+
+    if q:
+        projects_list = projects_list.filter(
+            Q(project_title__icontains=q) |
+            Q(project_subname__icontains=q) |
+            Q(project_description__icontains=q)
+        )
+
+    if category:
+        projects_list = projects_list.filter(project_category=category)
+
+    if status:
+        projects_list = projects_list.filter(project_status=status)
+
+    if purpose:
+        projects_list = projects_list.filter(purpose=purpose)
+
+    paginator = Paginator(projects_list, 10)  # 10 properties per page
+    page_number = request.GET.get('page')
+    try:
+        projects = paginator.page(page_number)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
+
+    # Fetch choices for filter dropdowns
+    categories = Projects._meta.get_field('project_category').choices
+    statuses = Projects._meta.get_field('project_status').choices
+    purposes = Projects._meta.get_field('purpose').choices
 
     context = {
-        "projects":projects
+        "projects": projects,
+        "q": q,
+        "category": category,
+        "status": status,
+        "purpose": purpose,
+        "categories": categories,
+        "statuses": statuses,
+        "purposes": purposes,
     }
-    return render(request,"dashboard/projects.html",context)
+    return render(request, "dashboard/projects.html", context)
 
 
 

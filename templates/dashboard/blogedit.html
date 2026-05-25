@@ -1,0 +1,57 @@
+{% extends 'dashboard/index.html' %}{% load static %}{% block admin %}
+<style>
+    input {
+        width: 100%;
+        display: block;
+        padding: 6px;
+        border-radius: 8px;
+        border: .5px solid lightblue;
+    }
+
+    textarea {
+        width: 100%;
+        height: 50px;
+        display: block;
+        padding: 6px;
+        border-radius: 8px;
+        border: .5px solid lightblue;
+    }
+</style>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title fw-semibold mb-4">Edit Blog</h5>
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <strong></strong> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+            <div class="card">
+
+                <form method="POST" enctype="multipart/form-data">
+
+                    {% csrf_token %}
+                    {{form.media}}
+                    {{ form.as_p }}
+
+
+
+
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+
+
+                <!-- -------------------------------------------------------------------- -->
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+{% endblock %}

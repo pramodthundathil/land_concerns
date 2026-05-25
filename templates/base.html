@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Land Concern's | Luxury Real Estate & Land Developers in Kerala{% endblock %}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}Premium land deals, luxury villas, commercial spaces, and residential plots in Kochi and across Kerala. Trusted real estate experts with over 30 years of trust.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}real estate Kerala, land sale Kochi, villas in Kochi, flats in Kochi, plots Aluva, commercial spaces Kerala, property developers, Land Concerns{% endblock %}">
+    
+    <!-- OpenGraph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}Land Concern's | Premium Real Estate & Land Developers{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Discover premium plots, luxury villas, and high-yield commercial spaces across Kochi and Kerala.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'assets/img/logo_full.png' %}{% endblock %}">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'asset/images/logos/logo_lc.png' %}" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- AOS Library (Animations) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Swiper.js (Sliders) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    
+    <!-- GLightbox (Galleries) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#090d16',      // Premium Rich Black
+                            navy: '#0a1c3a',      // Luxury Deep Navy
+                            blue: '#1b3c73',      // Logo Blue
+                            green: '#2e9e6b',     // Logo Green
+                            gold: '#2e9e6b',      // Accent Green (Matches Visiting Card)
+                            goldDark: '#208253',  // Darker Green for hover states
+                            lightBg: '#f8fafc',   // Soft Cream/Slate
+                            slate: '#475569'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Glassmorphism Styles -->
+    <style>
+        .glass-header {
+            background: rgba(10, 28, 58, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-header-scrolled {
+            background: rgba(10, 28, 58, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(197, 168, 128, 0.2);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .glass-card-dark {
+            background: rgba(10, 28, 58, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        [aos^="fade"][aos^="fade"].aos-animate {
+            transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        /* Custom Select dropdown styling */
+        .custom-select-dropdown.show-dropdown {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: scale(1) !important;
+        }
+        .custom-select-arrow.rotate-chevron {
+            transform: rotate(180deg) !important;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="font-sans bg-brand-lightBg text-slate-800 leading-relaxed overflow-x-hidden">
+
+    <!-- Sticky Navigation Bar -->
+    <header x-data="{ scrolled: false, mobileMenuOpen: false }" 
+            x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 50 })"
+            :class="scrolled ? 'glass-header-scrolled py-3' : 'glass-header py-5'"
+            class="fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                
+                <!-- Logo Branding -->
+                <a href="{% url 'Index' %}" class="flex items-center space-x-3 group">
+                    <!-- Image Logo -->
+                    <div class="relative w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center p-1 transform group-hover:scale-105 transition-all duration-300">
+                        <img src="{% static 'asset/images/logos/logo_lc.png' %}" alt="Land Concern's Logo" class="w-full h-full object-contain">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-2xl font-bold tracking-tight text-white transition-colors duration-300 group-hover:text-brand-gold">
+                            Land <span class="text-brand-green">Concern's</span>
+                        </span>
+                        <span class="text-[9px] uppercase tracking-[0.25em] text-white opacity-85">
+                            Land Dealers & Developers
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Menu -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    {% if header_menu_items %}
+                        {% for item in header_menu_items %}
+                            {% if item.has_children %}
+                                <!-- Dropdown Menu Item -->
+                                <div x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" class="relative">
+                                    <button class="flex items-center space-x-1 text-white hover:text-brand-gold font-medium text-sm tracking-wide transition-colors py-2">
+                                        <span>{{ item.title }}</span>
+                                        <i class="bi bi-chevron-down text-[10px] transform transition-transform" :class="open ? 'rotate-185' : ''"></i>
+                                    </button>
+                                    <div x-show="open" 
+                                         x-transition:enter="transition ease-out duration-200"
+                                         x-transition:enter-start="opacity-0 translate-y-3"
+                                         x-transition:enter-end="opacity-100 translate-y-0"
+                                         x-transition:leave="transition ease-in duration-150"
+                                         x-transition:leave-start="opacity-100 translate-y-0"
+                                         x-transition:leave-end="opacity-0 translate-y-3"
+                                         class="absolute left-0 mt-1 w-56 rounded-xl bg-white shadow-xl py-2 border border-slate-100 z-50">
+                                        {% for child in item.children %}
+                                            <a href="{{ child.computed_url }}" {% if child.target_blank %}target="_blank"{% endif %} class="block px-5 py-2.5 text-sm text-slate-700 hover:bg-brand-lightBg hover:text-brand-blue transition-colors">
+                                                {{ child.title }}
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <a href="{{ item.computed_url }}" {% if item.target_blank %}target="_blank"{% endif %} class="text-white hover:text-brand-gold font-medium text-sm tracking-wide transition-colors py-2 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-gold hover:after:w-full after:transition-all after:duration-300">
+                                    {{ item.title }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <!-- Fallback Navigation -->
+                        <a href="{% url 'Index' %}" class="text-white hover:text-brand-gold font-medium text-sm">Home</a>
+                        <a href="{% url 'Projects_' %}" class="text-white hover:text-brand-gold font-medium text-sm">Properties</a>
+                        <a href="{% url 'ServicesPage' %}" class="text-white hover:text-brand-gold font-medium text-sm">Services</a>
+                        <a href="{% url 'AboutUs' %}" class="text-white hover:text-brand-gold font-medium text-sm">About Us</a>
+                        <a href="{% url 'Blogs' %}" class="text-white hover:text-brand-gold font-medium text-sm">Blogs</a>
+                        <a href="{% url 'Contact' %}" class="text-white hover:text-brand-gold font-medium text-sm">Contact</a>
+                    {% endif %}
+                </nav>
+
+                <!-- Desktop CTA Call Button -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="tel:+918848342321" class="flex items-center space-x-2 text-white hover:text-brand-gold transition-colors text-sm font-semibold">
+                        <div class="w-8 h-8 rounded-full bg-brand-gold/15 flex items-center justify-center text-brand-gold">
+                            <i class="bi bi-telephone-fill text-xs"></i>
+                        </div>
+                        <span>+91 8848 342 321</span>
+                    </a>
+                    <a href="{% url 'Contact' %}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-brand-navy bg-brand-gold hover:bg-brand-goldDark rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 shadow-md">
+                        Enquire Now
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white hover:text-brand-gold focus:outline-none p-1.5 rounded-lg bg-white/10">
+                        <i class="bi" :class="mobileMenuOpen ? 'bi-x-lg text-xl' : 'bi-list text-2xl'"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 -translate-y-4"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-4"
+             class="md:hidden bg-brand-navy border-t border-white/5 shadow-2xl py-4 px-4 space-y-3">
+            {% if header_menu_items %}
+                {% for item in header_menu_items %}
+                    {% if item.has_children %}
+                        <div x-data="{ open: false }" class="space-y-1">
+                            <button @click="open = !open" class="flex items-center justify-between w-full text-white hover:text-brand-gold px-3 py-2 text-base font-medium rounded-lg hover:bg-white/5">
+                                <span>{{ item.title }}</span>
+                                <i class="bi" :class="open ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                            </button>
+                            <div x-show="open" class="pl-4 space-y-1 bg-white/5 rounded-lg py-1">
+                                {% for child in item.children %}
+                                    <a href="{{ child.computed_url }}" class="block px-3 py-2 text-sm text-slate-300 hover:text-white">{{ child.title }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{{ item.computed_url }}" class="block text-white hover:text-brand-gold px-3 py-2 text-base font-medium rounded-lg hover:bg-white/5">
+                            {{ item.title }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <a href="{% url 'Index' %}" class="block text-white hover:bg-white/5 px-3 py-2 rounded-lg">Home</a>
+                <a href="{% url 'Projects_' %}" class="block text-white hover:bg-white/5 px-3 py-2 rounded-lg">Properties</a>
+                <a href="{% url 'ServicesPage' %}" class="block text-white hover:bg-white/5 px-3 py-2 rounded-lg">Services</a>
+                <a href="{% url 'AboutUs' %}" class="block text-white hover:bg-white/5 px-3 py-2 rounded-lg">About Us</a>
+                <a href="{% url 'Blogs' %}" class="block text-white hover:bg-white/5 px-3 py-2 rounded-lg">Blogs</a>
+                <a href="{% url 'Contact' %}" class="block text-white hover:bg-white/5 px-3 py-2 rounded-lg">Contact</a>
+            {% endif %}
+            <div class="pt-4 border-t border-white/10 flex flex-col space-y-3 px-3">
+                <a href="tel:+918848342321" class="flex items-center space-x-2 text-white">
+                    <i class="bi bi-telephone-fill text-brand-gold"></i>
+                    <span>+91 8848 342 321</span>
+                </a>
+                <a href="{% url 'Contact' %}" class="w-full text-center py-2.5 text-sm font-semibold text-brand-navy bg-brand-gold hover:bg-brand-goldDark rounded-lg block">
+                    Enquire Now
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="min-h-screen">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Premium Footer Section -->
+    <footer class="bg-brand-dark text-slate-400 pt-16 pb-8 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                
+                <!-- Column 1: Brand Info -->
+                <div class="space-y-5">
+                    <a href="{% url 'Index' %}" class="flex items-center space-x-3 group">
+                        <div class="w-11 h-11 bg-white rounded-xl flex items-center justify-center p-1">
+                            <img src="{% static 'asset/images/logos/logo_lc.png' %}" alt="Land Concern's Logo" class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-serif text-xl font-bold tracking-tight text-white">
+                                Land <span class="text-brand-green">Concern's</span>
+                            </span>
+                            <span class="text-[8px] uppercase tracking-[0.25em] text-white opacity-85">
+                                Land Dealers & Developers
+                            </span>
+                        </div>
+                    </a>
+                    <p class="text-sm leading-relaxed text-slate-400">
+                        Over 30 years of trusted reputation in land deals, property development, commercial complexes, and luxury villa layouts across Kerala. Build your legacy with confidence.
+                    </p>
+                    <div class="flex items-center space-x-4">
+                        <a href="https://wa.me/918848342321" target="_blank" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-green hover:text-white flex items-center justify-center transition-colors">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-blue hover:text-white flex items-center justify-center transition-colors">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-pink-650 hover:text-white flex items-center justify-center transition-colors">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-blue-450 hover:text-white flex items-center justify-center transition-colors">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div>
+                    <h4 class="text-white font-semibold text-base mb-6 font-serif">Quick Navigation</h4>
+                    <ul class="space-y-3.5 text-sm">
+                        {% if footer_menu_items %}
+                            {% for item in footer_menu_items %}
+                                <li>
+                                    <a href="{{ item.computed_url }}" class="hover:text-brand-gold transition-colors flex items-center">
+                                        <i class="bi bi-chevron-right text-[10px] mr-2 text-brand-gold"></i>
+                                        <span>{{ item.title }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li><a href="{% url 'Index' %}" class="hover:text-brand-gold transition-colors">Home</a></li>
+                            <li><a href="{% url 'Projects_' %}" class="hover:text-brand-gold transition-colors">Properties</a></li>
+                            <li><a href="{% url 'ServicesPage' %}" class="hover:text-brand-gold transition-colors">Services</a></li>
+                            <li><a href="{% url 'AboutUs' %}" class="hover:text-brand-gold transition-colors">About Us</a></li>
+                            <li><a href="{% url 'Blogs' %}" class="hover:text-brand-gold transition-colors">Latest Blogs</a></li>
+                            <li><a href="{% url 'Careers' %}" class="hover:text-brand-gold transition-colors">Careers</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <!-- Column 3: Property Categories -->
+                <div>
+                    <h4 class="text-white font-semibold text-base mb-6 font-serif">Property Categories</h4>
+                    <ul class="space-y-3.5 text-sm">
+                        <li>
+                            <a href="{% url 'Projects_Apartments' %}" class="hover:text-brand-gold transition-colors flex items-center">
+                                <i class="bi bi-building text-[12px] mr-2.5 text-brand-green"></i>
+                                <span>Premium Apartments</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'Projects_House' %}" class="hover:text-brand-gold transition-colors flex items-center">
+                                <i class="bi bi-house-heart text-[12px] mr-2.5 text-brand-green"></i>
+                                <span>Houses</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'Projects_Commercial' %}" class="hover:text-brand-gold transition-colors flex items-center">
+                                <i class="bi bi-briefcase text-[12px] mr-2.5 text-brand-green"></i>
+                                <span>Commercial Workspaces</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'Projects_Office' %}" class="hover:text-brand-gold transition-colors flex items-center">
+                                <i class="bi bi-building-up text-[12px] mr-2.5 text-brand-green"></i>
+                                <span>Premium Office Spaces</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'Projects_Renovation' %}" class="hover:text-brand-gold transition-colors flex items-center">
+                                <i class="bi bi-tools text-[12px] mr-2.5 text-brand-green"></i>
+                                <span>Renovation & Restoration</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Contact Information -->
+                <div class="space-y-4">
+                    <h4 class="text-white font-semibold text-base mb-6 font-serif">Get In Touch</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start">
+                            <i class="bi bi-geo-alt text-brand-gold text-lg mr-3 mt-0.5"></i>
+                            <span>Parayil Building, Manjummel,<br>Ernakulam - 683501, Kerala</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="bi bi-telephone text-brand-gold text-base mr-3"></i>
+                            <div class="flex flex-col">
+                                <a href="tel:+918848342321" class="hover:text-white transition-colors">+91 8848 342 321</a>
+                                <a href="tel:+919388176595" class="hover:text-white transition-colors">+91 9388 176 595</a>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="bi bi-envelope text-brand-gold text-base mr-3"></i>
+                            <a href="mailto:brgpillai1965@gmail.com" class="hover:text-white transition-colors">brgpillai1965@gmail.com</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Footer Bottom Bar -->
+            <div class="pt-8 mt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500">
+                <p>&copy; {% now "Y" %} Land Concern's. All Rights Reserved. Designed by Byteboot.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-slate-400">Privacy Policy</a>
+                    <a href="#" class="hover:text-slate-400">Terms of Service</a>
+                    <a href="#" class="hover:text-slate-400">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS Initialisation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 120,
+            easing: 'ease-out-cubic'
+        });
+    </script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Swiper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <!-- GLightbox -->
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const lightbox = GLightbox({
+                selector: '.glightbox',
+                touchNavigation: true,
+                loop: true
+            });
+            
+            // Custom Select Dropdowns Initialization
+            const selects = document.querySelectorAll('select:not([multiple]):not([id*="id_media_lib"]):not([class*="form-select"]):not([class*="form-control"]):not([class*="admin"])');
+            selects.forEach(select => {
+                if (select.dataset.customSelectProcessed) return;
+                select.dataset.customSelectProcessed = "true";
+                
+                // Hide the native select
+                select.classList.add('hidden');
+                
+                // Wrapper
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative w-full custom-select-wrapper';
+                select.parentNode.insertBefore(wrapper, select);
+                wrapper.appendChild(select);
+                
+                // Get selected option
+                const selectedOption = select.options[select.selectedIndex] || select.options[0];
+                const labelText = selectedOption ? selectedOption.text : 'Select...';
+                
+                // Trigger Button
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-3.5 text-xs text-left flex items-center justify-between text-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-green/30 focus:border-brand-green transition-all duration-200';
+                button.innerHTML = `
+                    <span class="custom-select-label truncate">${labelText}</span>
+                    <i class="bi bi-chevron-down text-slate-450 transition-transform duration-200 custom-select-arrow text-[10px] ml-2"></i>
+                `;
+                wrapper.appendChild(button);
+                
+                // Dropdown Menu container
+                const dropdown = document.createElement('div');
+                dropdown.className = 'absolute z-50 left-0 right-0 mt-1.5 bg-white border border-slate-150 rounded-xl shadow-xl opacity-0 invisible scale-95 origin-top transition-all duration-200 max-h-60 overflow-y-auto py-1.5 custom-select-dropdown';
+                
+                // Populate options
+                Array.from(select.options).forEach(opt => {
+                    const item = document.createElement('div');
+                    item.className = 'px-3.5 py-2 text-xs text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors custom-select-option flex items-center justify-between';
+                    item.dataset.value = opt.value;
+                    
+                    if (opt.selected) {
+                        item.classList.add('bg-slate-50', 'font-semibold', 'text-brand-green');
+                        item.innerHTML = `<span>${opt.text}</span><i class="bi bi-check text-brand-green text-sm"></i>`;
+                    } else {
+                        item.textContent = opt.text;
+                    }
+                    
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        
+                        // Reset all checkmarks
+                        dropdown.querySelectorAll('.custom-select-option').forEach(el => {
+                            el.classList.remove('bg-slate-50', 'font-semibold', 'text-brand-green');
+                            el.innerHTML = el.textContent;
+                        });
+                        
+                        // Set active
+                        item.classList.add('bg-slate-50', 'font-semibold', 'text-brand-green');
+                        item.innerHTML = `<span>${opt.text}</span><i class="bi bi-check text-brand-green text-sm"></i>`;
+                        
+                        // Update button label
+                        button.querySelector('.custom-select-label').textContent = opt.text;
+                        
+                        // Update original select and trigger change
+                        select.value = opt.value;
+                        select.dispatchEvent(new Event('change', { bubbles: true }));
+                        
+                        // Close menu
+                        closeDropdown();
+                    });
+                    
+                    dropdown.appendChild(item);
+                });
+                
+                wrapper.appendChild(dropdown);
+                
+                const arrow = button.querySelector('.custom-select-arrow');
+                function toggleDropdown() {
+                    const isOpen = dropdown.classList.contains('show-dropdown');
+                    document.querySelectorAll('.custom-select-dropdown').forEach(d => {
+                        if (d !== dropdown) {
+                            d.classList.remove('show-dropdown');
+                            const a = d.previousSibling.querySelector('.custom-select-arrow');
+                            if (a) a.classList.remove('rotate-chevron');
+                        }
+                    });
+                    
+                    if (isOpen) {
+                        closeDropdown();
+                    } else {
+                        dropdown.classList.add('show-dropdown');
+                        arrow.classList.add('rotate-chevron');
+                    }
+                }
+                
+                function closeDropdown() {
+                    dropdown.classList.remove('show-dropdown');
+                    arrow.classList.remove('rotate-chevron');
+                }
+                
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleDropdown();
+                });
+                
+                // Synchronize if select is updated externally
+                select.addEventListener('change', () => {
+                    const val = select.value;
+                    const opt = Array.from(select.options).find(o => o.value === val);
+                    if (opt) {
+                        button.querySelector('.custom-select-label').textContent = opt.text;
+                        dropdown.querySelectorAll('.custom-select-option').forEach(el => {
+                            el.classList.remove('bg-slate-50', 'font-semibold', 'text-brand-green');
+                            el.innerHTML = el.textContent;
+                            if (el.dataset.value === val) {
+                                el.classList.add('bg-slate-50', 'font-semibold', 'text-brand-green');
+                                el.innerHTML = `<span>${opt.text}</span><i class="bi bi-check text-brand-green text-sm"></i>`;
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // Global click to close
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.custom-select-dropdown').forEach(d => {
+                    d.classList.remove('show-dropdown');
+                    const a = d.previousSibling.querySelector('.custom-select-arrow');
+                    if (a) a.classList.remove('rotate-chevron');
+                });
+            });
+        });
+    </script>
+    
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/918848342321" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-50 group flex items-center"
+       aria-label="Chat on WhatsApp">
+        <!-- Tooltip/Message label (reveals on hover) -->
+        <span class="mr-3 bg-white text-slate-800 text-xs font-semibold px-3 py-2 rounded-xl shadow-xl border border-slate-100/80 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none whitespace-nowrap flex items-center gap-2">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            Need Help? Chat with us
+        </span>
+        
+        <!-- Button Container -->
+        <div class="relative flex items-center justify-center">
+            <!-- Pulsing outer ring -->
+            <span class="absolute inline-flex h-14 w-14 animate-ping rounded-full bg-emerald-500/40 opacity-75 duration-1000"></span>
+            
+            <!-- Icon Button -->
+            <div class="relative w-14 h-14 bg-gradient-to-tr from-emerald-500 to-green-400 hover:from-emerald-600 hover:to-green-500 text-white rounded-full flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.15)] hover:shadow-[0_8px_30px_rgba(16,185,129,0.4)] transform hover:-translate-y-1 transition-all duration-300">
+                <i class="bi bi-whatsapp text-2xl"></i>
+            </div>
+        </div>
+    </a>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

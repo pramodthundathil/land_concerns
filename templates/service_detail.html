@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ service.title }} | Our Services | Land Concern's{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="relative bg-brand-navy pt-32 pb-20 overflow-hidden text-center text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-blue/30 via-transparent to-transparent opacity-60"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10 space-y-4">
+        <span class="text-brand-gold font-semibold text-xs md:text-sm uppercase tracking-[0.25em] block" data-aos="fade-down">
+            Expertise Detail
+        </span>
+        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight" data-aos="fade-up" data-aos-delay="100">
+            {{ service.title }}
+        </h1>
+        <div class="flex justify-center items-center space-x-2 text-slate-350 text-xs md:text-sm font-light" data-aos="fade-up" data-aos-delay="150">
+            <a href="{% url 'Index' %}" class="hover:text-white transition-colors">Home</a>
+            <span>/</span>
+            <a href="{% url 'ServicesPage' %}" class="hover:text-white transition-colors">Services</a>
+            <span>/</span>
+            <span class="text-white opacity-70">{{ service.title }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Service Details Layout -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        
+        <!-- Left Column: Details -->
+        <div class="lg:col-span-2 space-y-8">
+            <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-6">
+                <!-- Icon & Title -->
+                <div class="flex items-center space-x-4 pb-6 border-b border-slate-150">
+                    <div class="w-16 h-16 rounded-2xl bg-brand-navy text-brand-gold flex items-center justify-center text-3xl shadow-sm shrink-0">
+                        <i class="{{ service.icon|default:'bi bi-gear-fill' }}"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-serif text-xl sm:text-2xl font-bold text-brand-navy">{{ service.title }}</h2>
+                        <p class="text-slate-400 text-xs font-light mt-0.5">Professional real estate developers & consultants</p>
+                    </div>
+                </div>
+
+                <!-- Description (rendered safely) -->
+                <div class="prose max-w-none text-slate-650 font-light text-sm sm:text-base leading-relaxed space-y-4">
+                    {{ service.description|safe }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Sticky Contact Widget -->
+        <div class="lg:col-span-1">
+            <div class="sticky top-28 space-y-6">
+                
+                <!-- Contact Card -->
+                <div class="glass-card bg-white rounded-2xl shadow-md border border-slate-100 p-6 md:p-8">
+                    <h4 class="font-serif text-lg font-bold text-brand-navy mb-4">Request Service Advice</h4>
+                    <p class="text-xs text-slate-500 font-light mb-6">
+                        Contact our consultants to discuss this service, request pricing estimations, or legal checking.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <a href="tel:+918848342321" class="flex items-center space-x-3.5 p-3 rounded-xl bg-brand-navy hover:bg-brand-blue text-white transition-colors">
+                            <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-brand-gold shrink-0">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-slate-300 block uppercase tracking-wider font-light">Call Advisor</span>
+                                <span class="font-bold text-sm">+91 8848 342 321</span>
+                            </div>
+                        </a>
+                        
+                        <a href="https://wa.me/918848342321?text=Hi,%20I'm%2520interested%20in%20your%20service:%20{{ service.title }}" target="_blank" class="flex items-center space-x-3.5 p-3 rounded-xl bg-brand-green hover:bg-emerald-700 text-white transition-colors">
+                            <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                                <i class="bi bi-whatsapp"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-slate-100 block uppercase tracking-wider font-light">WhatsApp Direct</span>
+                                <span class="font-bold text-sm">Send Instant Message</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Simple Enquiry Form -->
+                    <form action="{% url 'Contact' %}" method="POST" class="space-y-4 border-t border-slate-150 pt-6">
+                        {% csrf_token %}
+                        <input type="hidden" name="subject" value="Enquiry for Service: {{ service.title }}">
+                        
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">Your Name</label>
+                            <input type="text" name="name" required class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-brand-blue text-slate-700">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">Phone Number</label>
+                            <input type="tel" name="phone" required class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-brand-blue text-slate-700">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">Message</label>
+                            <textarea name="message" rows="3" required class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-brand-blue text-slate-700">I am interested in your {{ service.title }} service. Please call me back with details.</textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-2.5 bg-brand-gold hover:bg-brand-goldDark text-brand-navy font-bold rounded-lg text-xs tracking-wider uppercase transition-colors shadow-sm mt-2">
+                            Submit Enquiry
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

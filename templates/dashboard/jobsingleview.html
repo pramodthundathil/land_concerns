@@ -1,0 +1,61 @@
+{% extends 'dashboard/index.html' %}{% load static %}{% block admin %}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title fw-semibold mb-4">Job Single</h5>
+            <a href="{%url 'JobsEdits' %}" class="text-info" style="font-size: larger;"><i class="bi bi-arrow-left-circle"></i> Back to Jobs</a>
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <strong></strong> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-body p-4">
+            <form method="post">
+                {% csrf_token %}
+           <table class="table table-stripped">
+            <tr>
+                <th>Job Title</th>
+                <td> <input type="text" name="title" value="{{job.title}}" class="form-control text-primary" style="font-size: larger;" required></td>
+            </tr>
+            <tr>
+                <th>Job Qualification</th>
+                <td><input type="text" name="education" value="{{job.education}}" class="form-control" required></td>
+            </tr>
+            <tr>
+                <th>Expriance</th>
+                <td><input type="text" name="experiance" value="{{job.experience}}" class="form-control" required></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>
+                    <textarea name="descrition" id="" class="form-control" style="height: 100px;">{{job.description}}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>Salary</th>
+                <td><input type="text" name="salary" value="{{job.salary}}" class="form-control" required></td>
+            </tr>
+            <tr>
+                <th>Location</th>
+                <td><input type="text" name="location" value="{{job.location}}" class="form-control" required></td>
+            </tr>
+            <tr>
+                <th colspan="2 text-center" style="text-align: center;" >
+                    <button class="btn btn-secondary text-center" type="submit">Update</button>
+                </th>
+            </tr>
+           </table>
+        </form>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

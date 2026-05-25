@@ -1,0 +1,481 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Land Concern's | Luxury Real Estate & Land Developers{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Swiper Slider -->
+<div class="relative h-[90vh] md:h-screen w-full overflow-hidden bg-brand-dark">
+    <!-- Background Slider Container -->
+    <div class="swiper hero-swiper h-full w-full">
+        <div class="swiper-wrapper">
+            {% if pictures %}
+                {% for slide in pictures %}
+                <div class="swiper-slide relative h-full w-full">
+                    <!-- Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-brand-navy/60 z-10"></div>
+                    <!-- Image -->
+                    {% if slide.pictures %}
+                        <img src="{{ slide.pictures.url }}" alt="{{ slide.caption }}" class="h-full w-full object-cover transform scale-105 transition-transform duration-[10000ms] ease-out">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80" alt="Luxury Real Estate" class="h-full w-full object-cover transform scale-105 transition-transform duration-[10000ms] ease-out">
+                    {% endif %}
+                    
+                    <!-- Content Overlay -->
+                    <div class="absolute inset-0 z-20 flex items-center justify-center px-4">
+                        <div class="text-center max-w-4xl space-y-6">
+                            <span class="inline-block text-brand-gold font-semibold text-xs md:text-sm uppercase tracking-[0.3em]" data-aos="fade-down">
+                                {{ slide.sub_headding|default:"Luxury Real Estate Experts" }}
+                            </span>
+                            <h1 class="font-serif text-2xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight" data-aos="fade-up" data-aos-delay="200">
+                                {{ slide.caption }}
+                            </h1>
+                            <p class="text-slate-200 text-sm md:text-lg max-w-2xl mx-auto font-light leading-relaxed" data-aos="fade-up" data-aos-delay="400">
+                                Connect with Kerala's premier developers and property consultants for trusted plots, villas, and commercial land investments.
+                            </p>
+                            {% if slide.show_view_button and slide.linked_property %}
+                            <div class="pt-2" data-aos="fade-up" data-aos-delay="600">
+                                <a href="{% url 'ProjectSingle' slide.linked_property.id %}" class="inline-flex items-center justify-center px-6 py-2.5 text-xs font-semibold uppercase tracking-wider text-brand-navy bg-brand-gold hover:bg-brand-goldDark rounded-lg transition-all duration-300 shadow-lg transform hover:-translate-y-0.5">
+                                    <span>View Property</span>
+                                    <i class="bi bi-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Fallback Slide 1 -->
+                <div class="swiper-slide relative h-full w-full">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-brand-navy/60 z-10"></div>
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80" alt="Luxury Real Estate" class="h-full w-full object-cover">
+                    <div class="absolute inset-0 z-20 flex items-center justify-center px-4">
+                        <div class="text-center max-w-4xl space-y-6">
+                            <span class="inline-block text-brand-gold font-semibold text-xs md:text-sm uppercase tracking-[0.3em]">
+                                Premium Land Developers
+                            </span>
+                            <h1 class="font-serif text-2xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight">
+                                Luxury Living Starts Here
+                            </h1>
+                            <p class="text-slate-200 text-sm md:text-lg max-w-2xl mx-auto font-light">
+                                Hand-picked premium villa layouts and agricultural land plots across Ernakulam, Aluva, and Palakkad.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <!-- Navigation Buttons -->
+        <div class="swiper-button-next !text-white hover:!text-brand-gold transition-colors !right-8 hidden md:flex"></div>
+        <div class="swiper-button-prev !text-white hover:!text-brand-gold transition-colors !left-8 hidden md:flex"></div>
+        <!-- Pagination -->
+        <div class="swiper-pagination !bottom-12"></div>
+    </div>
+</div>
+
+<!-- Floating Property Search Form (Positioned as sibling to avoid overflow-hidden cutoff) -->
+<div class="relative -mt-16 md:-mt-24 z-30 px-4">
+    <div class="max-w-6xl mx-auto glass-card bg-white rounded-2xl shadow-2xl p-6 md:p-8 border border-white/60">
+        <form action="{% url 'Projects_' %}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            
+            <!-- Keyword Search -->
+            <div class="space-y-1.5">
+                <label class="text-xs font-bold uppercase text-brand-navy tracking-wider block">Keyword Search</label>
+                <div class="relative">
+                    <input type="text" name="q" placeholder="Kochi, Palakkad, Villa..." class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 pl-9 pr-4 text-xs focus:outline-none focus:border-brand-green transition-colors placeholder:text-slate-400 text-slate-700">
+                    <i class="bi bi-search absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                </div>
+            </div>
+
+            <!-- Property Category -->
+            <div class="space-y-1.5">
+                <label class="text-xs font-bold uppercase text-brand-navy tracking-wider block">Property Type</label>
+                <select name="category" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-3 text-xs focus:outline-none focus:border-brand-green transition-colors text-slate-700">
+                    <option value="">All Categories</option>
+                    <option value="House">House</option>
+                    <option value="Apartments">Apartments</option>
+                    <option value="Land">Land / Plots</option>
+                    <option value="Commercial">Commercial</option>
+                    <option value="Shops">Shops</option>
+                    <option value="Office Spaces">Office Spaces</option>
+                </select>
+            </div>
+
+            <!-- Purpose -->
+            <div class="space-y-1.5">
+                <label class="text-xs font-bold uppercase text-brand-navy tracking-wider block">Purpose</label>
+                <select name="purpose" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-3 text-xs focus:outline-none focus:border-brand-green transition-colors text-slate-700">
+                    <option value="">Any Purpose</option>
+                    <option value="Sale">For Sale</option>
+                    <option value="Rent">For Rent</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex items-end">
+                <button type="submit" class="w-full bg-brand-green hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 shadow-md text-xs uppercase tracking-wider">
+                    <i class="bi bi-search mr-2"></i>
+                    <span>Search Properties</span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- Spacing for floating search -->
+<div class="h-10 md:h-12"></div>
+
+<!-- Featured Properties Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12" data-aos="fade-up">
+            <div>
+                <span class="text-brand-gold font-semibold text-sm uppercase tracking-wider">Curated Collections</span>
+                <h2 class="font-serif text-3xl md:text-4xl font-bold text-brand-navy mt-2">Featured Property Deals</h2>
+            </div>
+            <a href="{% url 'Projects_' %}" class="inline-flex items-center text-brand-blue hover:text-brand-gold font-semibold mt-4 md:mt-0 transition-colors group">
+                <span>View All Properties</span>
+                <i class="bi bi-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% if projects %}
+                {% for prop in projects %}
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col h-full cursor-pointer"
+                     onclick="location.href='{% url 'ProjectSingle' prop.id %}'"
+                     data-aos="fade-up" data-aos-delay="150">
+                    <!-- Property Image -->
+                    <div class="relative overflow-hidden aspect-[4/3] bg-slate-100">
+                        <!-- Badges -->
+                        <div class="absolute top-4 left-4 z-10 flex flex-col space-y-2">
+                            <span class="px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full bg-brand-navy text-white shadow-md">
+                                {{ prop.project_category }}
+                            </span>
+                        </div>
+                        <div class="absolute top-4 right-4 z-10">
+                        </div>
+                        
+                        {% if prop.primary_image %}
+                            <img src="{{ prop.primary_image.url }}" alt="{{ prop.project_title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="{{ prop.project_title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out">
+                        {% endif %}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+
+                    <!-- Property Details -->
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex items-center space-x-2 text-slate-400 text-xs mb-2">
+                            <i class="bi bi-geo-alt-fill text-brand-gold"></i>
+                            <span>{{ prop.project_subname }}</span>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold text-brand-navy group-hover:text-brand-blue transition-colors mb-3">
+                            <a href="{% url 'ProjectSingle' prop.id %}">{{ prop.project_title }}</a>
+                        </h3>
+                        <p class="text-slate-500 text-sm font-light line-clamp-3 mb-6">
+                            {{ prop.project_description|striptags|truncatewords:20 }}
+                        </p>
+                        
+                        <!-- Contact Action Buttons -->
+                        <div class="mt-auto pt-5 border-t border-slate-100 grid grid-cols-2 gap-3">
+                            <a href="tel:+918848342321" onclick="event.stopPropagation();" class="inline-flex items-center justify-center py-2 px-3 bg-brand-lightBg hover:bg-brand-navy text-brand-navy hover:text-white rounded-lg text-xs font-semibold transition-all duration-300 shadow-sm border border-slate-150">
+                                <i class="bi bi-telephone-fill mr-1.5"></i>
+                                <span>Call</span>
+                            </a>
+                            <a href="https://wa.me/918848342321?text=Hi,%20I'm%20interested%2520in%20the%20property:%20{{ prop.project_title }}" onclick="event.stopPropagation();" target="_blank" class="inline-flex items-center justify-center py-2 px-3 bg-brand-green hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition-all duration-300 shadow-sm">
+                                <i class="bi bi-whatsapp mr-1.5"></i>
+                                <span>WhatsApp</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-slate-500 col-span-3 py-12">No featured property deals available at the moment.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Property Categories Section -->
+<section class="py-20 bg-brand-lightBg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+            <span class="text-brand-gold font-semibold text-sm uppercase tracking-wider">Expert Portfolio</span>
+            <h2 class="font-serif text-3xl md:text-4xl font-bold text-brand-navy mt-2 mb-4">Explore Premium Categories</h2>
+            <p class="text-slate-500 font-light">Whether you are seeking pristine agricultural land, high-yield commercial complexes, or luxury waterfront plots, our customized options fit your precise needs.</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <!-- Houses -->
+            <a href="{% url 'Projects_House' %}" class="group bg-white hover:bg-brand-navy p-6 rounded-2xl text-center shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col items-center justify-center border border-slate-100" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-14 h-14 rounded-full bg-brand-gold/15 group-hover:bg-brand-gold text-brand-gold group-hover:text-brand-navy flex items-center justify-center mb-4 transition-all duration-300">
+                    <i class="bi bi-house-door text-2xl"></i>
+                </div>
+                <h4 class="font-semibold text-sm text-brand-navy group-hover:text-white transition-colors">Houses</h4>
+            </a>
+            <!-- Apartments -->
+            <a href="{% url 'Projects_Apartments' %}" class="group bg-white hover:bg-brand-navy p-6 rounded-2xl text-center shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col items-center justify-center border border-slate-100" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-14 h-14 rounded-full bg-brand-gold/15 group-hover:bg-brand-gold text-brand-gold group-hover:text-brand-navy flex items-center justify-center mb-4 transition-all duration-300">
+                    <i class="bi bi-building text-2xl"></i>
+                </div>
+                <h4 class="font-semibold text-sm text-brand-navy group-hover:text-white transition-colors">Apartments</h4>
+            </a>
+            <!-- Land -->
+            <a href="{% url 'Projects_' %}?category=Land" class="group bg-white hover:bg-brand-navy p-6 rounded-2xl text-center shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col items-center justify-center border border-slate-100" data-aos="fade-up" data-aos-delay="300">
+                <div class="w-14 h-14 rounded-full bg-brand-gold/15 group-hover:bg-brand-gold text-brand-gold group-hover:text-brand-navy flex items-center justify-center mb-4 transition-all duration-300">
+                    <i class="bi bi-map text-2xl"></i>
+                </div>
+                <h4 class="font-semibold text-sm text-brand-navy group-hover:text-white transition-colors">Premium Land</h4>
+            </a>
+            <!-- Commercial -->
+            <a href="{% url 'Projects_Commercial' %}" class="group bg-white hover:bg-brand-navy p-6 rounded-2xl text-center shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col items-center justify-center border border-slate-100" data-aos="fade-up" data-aos-delay="400">
+                <div class="w-14 h-14 rounded-full bg-brand-gold/15 group-hover:bg-brand-gold text-brand-gold group-hover:text-brand-navy flex items-center justify-center mb-4 transition-all duration-300">
+                    <i class="bi bi-building-fill text-2xl"></i>
+                </div>
+                <h4 class="font-semibold text-sm text-brand-navy group-hover:text-white transition-colors">Commercial</h4>
+            </a>
+            <!-- Shops -->
+            <a href="{% url 'Projects_' %}?category=Shops" class="group bg-white hover:bg-brand-navy p-6 rounded-2xl text-center shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col items-center justify-center border border-slate-100" data-aos="fade-up" data-aos-delay="500">
+                <div class="w-14 h-14 rounded-full bg-brand-gold/15 group-hover:bg-brand-gold text-brand-gold group-hover:text-brand-navy flex items-center justify-center mb-4 transition-all duration-300">
+                    <i class="bi bi-shop text-2xl"></i>
+                </div>
+                <h4 class="font-semibold text-sm text-brand-navy group-hover:text-white transition-colors">Retail Shops</h4>
+            </a>
+            <!-- Office Spaces -->
+            <a href="{% url 'Projects_Office' %}" class="group bg-white hover:bg-brand-navy p-6 rounded-2xl text-center shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col items-center justify-center border border-slate-100" data-aos="fade-up" data-aos-delay="600">
+                <div class="w-14 h-14 rounded-full bg-brand-gold/15 group-hover:bg-brand-gold text-brand-gold group-hover:text-brand-navy flex items-center justify-center mb-4 transition-all duration-300">
+                    <i class="bi bi-briefcase text-2xl"></i>
+                </div>
+                <h4 class="font-semibold text-sm text-brand-navy group-hover:text-white transition-colors">Office Spaces</h4>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us / Luxury Metrics Section -->
+<section class="py-24 bg-brand-navy relative overflow-hidden">
+    <!-- Subdued Background Light Grid -->
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand-blue/30 via-transparent to-transparent opacity-40"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+            <!-- Context & Trust Copy -->
+            <div class="space-y-6" data-aos="fade-right">
+                <span class="text-brand-gold font-semibold text-sm uppercase tracking-wider block">Unrivaled Expertise</span>
+                <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight">
+                    Shaping Trust & Building Value for Three Decades
+                </h2>
+                <p class="text-slate-300 font-light leading-relaxed">
+                    At Land Concern's, we have built our foundations on complete transparency, legal verification, and tailored developer choices. As Kerala's premium property group, we guide investors, homebuyers, and corporates to the finest locations with absolute safety.
+                </p>
+                
+                <div class="grid grid-cols-2 gap-6 pt-6">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0">
+                            <i class="bi bi-file-earmark-check-fill"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold text-sm">100% Legal Clearances</h4>
+                            <p class="text-slate-400 text-xs font-light">Zero documentation disputes.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-brand-gold/15 flex items-center justify-center text-brand-gold shrink-0">
+                            <i class="bi bi-shield-fill-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold text-sm">Certified Land Layouts</h4>
+                            <p class="text-slate-400 text-xs font-light">Prime plots and legal titles.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Luxury Counters Grid -->
+            <div class="grid grid-cols-2 gap-8" data-aos="fade-left">
+                <!-- Counter 1 -->
+                <div class="glass-card-dark rounded-2xl p-8 border border-white/5 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl sm:text-5xl font-extrabold text-brand-gold mb-2">30+</span>
+                    <span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Years of Trust</span>
+                </div>
+                <!-- Counter 2 -->
+                <div class="glass-card-dark rounded-2xl p-8 border border-white/5 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl sm:text-5xl font-extrabold text-brand-gold mb-2">1200+</span>
+                    <span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Happy Clients</span>
+                </div>
+                <!-- Counter 3 -->
+                <div class="glass-card-dark rounded-2xl p-8 border border-white/5 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl sm:text-5xl font-extrabold text-brand-gold mb-2">500+</span>
+                    <span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Acres Developed</span>
+                </div>
+                <!-- Counter 4 -->
+                <div class="glass-card-dark rounded-2xl p-8 border border-white/5 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl sm:text-5xl font-extrabold text-brand-gold mb-2">100%</span>
+                    <span class="text-slate-300 text-sm font-semibold uppercase tracking-wider">Title Cleared</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+            <span class="text-brand-gold font-semibold text-sm uppercase tracking-wider">Testimonials</span>
+            <h2 class="font-serif text-3xl md:text-4xl font-bold text-brand-navy mt-2">What Our Clients Say</h2>
+        </div>
+
+        <div class="swiper testimonial-swiper max-w-4xl mx-auto" data-aos="fade-up">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide p-4">
+                    <div class="glass-card bg-brand-lightBg rounded-2xl p-8 md:p-12 relative shadow-lg text-center">
+                        <i class="bi bi-quote text-5xl text-brand-gold/30 absolute top-6 left-8"></i>
+                        <p class="text-slate-650 font-light italic leading-relaxed text-sm md:text-base relative z-10 mb-6">
+                            "Land Concern's guided us perfectly in purchasing land in Aluva. The documentation clearance checks were extremely thorough. We did not have to worry about a single government title verification hurdle. Best land developers in Ernakulam!"
+                        </p>
+                        <div class="font-semibold text-brand-navy">Mr. Rajesh Kurup</div>
+                        <div class="text-xs text-slate-400 mt-1">NRI Investor, Kochi</div>
+                    </div>
+                </div>
+                <div class="swiper-slide p-4">
+                    <div class="glass-card bg-brand-lightBg rounded-2xl p-8 md:p-12 relative shadow-lg text-center">
+                        <i class="bi bi-quote text-5xl text-brand-gold/30 absolute top-6 left-8"></i>
+                        <p class="text-slate-650 font-light italic leading-relaxed text-sm md:text-base relative z-10 mb-6">
+                            "As an institutional buyer, legal clarity was our number one concern. Land Concern's team facilitated an excellent multi-acre layouts purchase in Kakkanad with completely verified, dispute-free title deeds. Highly recommended."
+                        </p>
+                        <div class="font-semibold text-brand-navy">Dr. Elizabeth Thomas</div>
+                        <div class="text-xs text-slate-400 mt-1">Managing Director, MedTech Systems</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Pagination and Navigation -->
+            <div class="swiper-pagination !static mt-8"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Blogs Section -->
+<section class="py-20 bg-brand-lightBg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12" data-aos="fade-up">
+            <div>
+                <span class="text-brand-gold font-semibold text-sm uppercase tracking-wider">Expert Insights</span>
+                <h2 class="font-serif text-3xl md:text-4xl font-bold text-brand-navy mt-2">Latest Publications</h2>
+            </div>
+            <a href="{% url 'Blogs' %}" class="inline-flex items-center text-brand-blue hover:text-brand-gold font-semibold mt-4 md:mt-0 transition-colors group">
+                <span>Read All Insights</span>
+                <i class="bi bi-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {% if blogs %}
+                {% for post in blogs %}
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col md:flex-row h-full" data-aos="fade-up" data-aos-delay="150">
+                    <!-- Thumbnail -->
+                    <div class="w-full md:w-2/5 aspect-[4/3] md:aspect-auto overflow-hidden bg-slate-100 relative shrink-0">
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" alt="{{ post.blogtitle }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=600&q=80" alt="{{ post.blogtitle }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out">
+                        {% endif %}
+                    </div>
+                    <!-- Details -->
+                    <div class="p-6 flex flex-col justify-between flex-grow">
+                        <div>
+                            <span class="text-xs text-brand-gold uppercase tracking-wider font-semibold">Real Estate Insights</span>
+                            <h3 class="font-serif text-lg font-bold text-brand-navy group-hover:text-brand-blue transition-colors mt-2 mb-3 leading-snug">
+                                <a href="{% url 'BlogSingle' post.id %}">{{ post.blogtitle }}</a>
+                            </h3>
+                            <p class="text-slate-500 text-sm font-light line-clamp-3 mb-4">
+                                {{ post.description }}
+                            </p>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 pt-4 border-t border-slate-50">
+                            <span>{{ post.date_added|date:"d M, Y" }}</span>
+                            <a href="{% url 'BlogSingle' post.id %}" class="text-brand-blue hover:text-brand-gold font-semibold flex items-center transition-colors">
+                                <span>Read More</span>
+                                <i class="bi bi-chevron-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-slate-500 col-span-2 py-12">No blog articles published yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Call To Action (CTA) Banner -->
+<section class="py-20 bg-brand-navy relative overflow-hidden text-center text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-brand-blue/30 via-transparent to-transparent opacity-60"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10 space-y-6" data-aos="zoom-in">
+        <span class="text-brand-gold font-semibold text-sm uppercase tracking-wider">Ready to Invest?</span>
+        <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">Find Your Next Premium Address</h2>
+        <p class="text-slate-300 font-light max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+            Get in touch with our veteran developers and property advisors for legal title checks, tailored villa quotes, or prime residential layout options.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <a href="{% url 'Contact' %}" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-brand-navy bg-brand-gold hover:bg-brand-goldDark rounded-lg transition-all duration-300 shadow-lg transform hover:-translate-y-0.5">
+                <i class="bi bi-envelope-fill mr-2"></i>
+                <span>Enquire Now</span>
+            </a>
+            <a href="tel:+918848342321" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-white bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-300 border border-white/20">
+                <i class="bi bi-telephone-fill mr-2"></i>
+                <span>Call +91 8848 342 321</span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Hero swiper initialization
+        const heroSwiper = new Swiper('.hero-swiper', {
+            loop: true,
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            speed: 1200
+        });
+
+        // Testimonial swiper initialization
+        const testimonialSwiper = new Swiper('.testimonial-swiper', {
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            speed: 800
+        });
+    });
+</script>
+{% endblock %}

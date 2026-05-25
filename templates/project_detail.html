@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.project_title }} | Land Concern's{% endblock %}
+
+{% block content %}
+<!-- Property Hero Banner -->
+<div class="relative h-[30vh] md:h-[45vh] w-full overflow-hidden bg-brand-dark">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/20 to-black/45 z-10 pointer-events-none"></div>
+    
+    <!-- Hero Slider -->
+    {% if project.projectpictures_set.exists or project.gallery_images.exists %}
+        <div class="swiper heroSwiper w-full h-full">
+            <div class="swiper-wrapper">
+                <!-- Primary Image First -->
+                {% if project.primary_image %}
+                <div class="swiper-slide">
+                    <img src="{{ project.primary_image.url }}" alt="{{ project.project_title }}" class="w-full h-full object-cover">
+                </div>
+                {% endif %}
+                <!-- ProjectPictures -->
+                {% for pic in project.projectpictures_set.all %}
+                <div class="swiper-slide">
+                    <img src="{{ pic.image.url }}" alt="{{ pic.title|default:project.project_title }}" class="w-full h-full object-cover">
+                </div>
+                {% endfor %}
+                <!-- GalleryImages ManyToMany -->
+                {% for img in project.gallery_images.all %}
+                <div class="swiper-slide">
+                    <img src="{{ img.file_path.url }}" alt="{{ project.project_title }}" class="w-full h-full object-cover">
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Swiper Navigation -->
+            <div class="swiper-button-next !text-white hover:!text-brand-gold transition-colors !right-4 !w-8 !h-8 !after:text-sm bg-black/35 rounded-full flex items-center justify-center z-20"></div>
+            <div class="swiper-button-prev !text-white hover:!text-brand-gold transition-colors !left-4 !w-8 !h-8 !after:text-sm bg-black/35 rounded-full flex items-center justify-center z-20"></div>
+            <!-- Pagination -->
+            <div class="swiper-pagination !bottom-4 z-20"></div>
+        </div>
+    {% else %}
+        {% if project.primary_image %}
+            <img src="{{ project.primary_image.url }}" alt="{{ project.project_title }}" class="w-full h-full object-cover">
+        {% else %}
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80" alt="{{ project.project_title }}" class="w-full h-full object-cover">
+        {% endif %}
+    {% endif %}
+    
+    <!-- Hero Breadcrumb & Title -->
+    <div class="absolute inset-0 z-20 flex items-end pointer-events-none">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-6 pointer-events-auto">
+            <div class="space-y-2">
+                <div class="flex items-center space-x-2 text-xs text-brand-gold font-semibold uppercase tracking-wider">
+                    <a href="{% url 'Index' %}" class="hover:text-white transition-colors">Home</a>
+                    <span>/</span>
+                    <a href="{% url 'Projects_' %}" class="hover:text-white transition-colors">Properties</a>
+                    <span>/</span>
+                    <span class="text-white opacity-70">{{ project.project_category }}</span>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h1 class="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">
+                        {{ project.project_title }}
+                    </h1>
+                    {% if project.price %}
+                    <span class="px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-xl bg-brand-green text-white shadow-lg shrink-0 self-start sm:self-auto">
+                        {{ project.formatted_price }}
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <div class="flex flex-wrap gap-4 text-xs md:text-sm text-slate-200 font-light">
+                    <span class="flex items-center">
+                        <i class="bi bi-geo-alt-fill text-brand-gold mr-1.5"></i>
+                        {{ project.project_subname }}
+                    </span>
+                    <span class="flex items-center">
+                        <i class="bi bi-tag-fill text-brand-gold mr-1.5"></i>
+                        {{ project.project_category }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Details Layout -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        
+        <!-- Left Side: Property Content & Gallery -->
+        <div class="lg:col-span-2 space-y-10">
+            
+            <!-- Key Details Card -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div>
+                    <span class="text-xs text-slate-400 block mb-1">Category</span>
+                    <span class="font-semibold text-brand-navy text-sm">{{ project.project_category }}</span>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-400 block mb-1">Location</span>
+                    <span class="font-semibold text-brand-navy text-sm">{{ project.project_subname|truncatechars:20 }}</span>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-400 block mb-1">Ownership</span>
+                    <span class="font-semibold text-brand-navy text-sm text-brand-green">100% Cleared Title</span>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-4">
+                <h3 class="font-serif text-xl font-bold text-brand-navy pb-3.5 border-b border-slate-100">
+                    Property Description & Layout
+                </h3>
+                <div class="prose max-w-none text-slate-650 font-light text-sm sm:text-base leading-relaxed">
+                    {{ project.project_description|safe }}
+                </div>
+            </div>
+
+            <!-- Specifications & Amenities -->
+            {% if project.amenities.exists %}
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-4">
+                <h3 class="font-serif text-xl font-bold text-brand-navy pb-3.5 border-b border-slate-100">
+                    Property Specifications & Amenities
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 pt-2">
+                    {% for amenity in project.amenities.all %}
+                    <div class="flex items-center justify-between py-2.5 border-b border-slate-100">
+                        <span class="text-sm text-slate-500 font-medium">{{ amenity.name }}</span>
+                        <span class="text-sm font-semibold text-brand-navy">{{ amenity.value }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Photo Gallery Lightbox -->
+            {% if project.primary_image or project.projectpictures_set.exists or project.gallery_images.exists %}
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-6">
+                <h3 class="font-serif text-xl font-bold text-brand-navy pb-3.5 border-b border-slate-100">
+                    Property Gallery
+                </h3>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <!-- Primary Image -->
+                    {% if project.primary_image %}
+                    <a href="{{ project.primary_image.url }}" data-gallery="property-gallery" class="glightbox block relative overflow-hidden rounded-xl aspect-[4/3] group shadow-sm bg-slate-100 border-2 border-brand-gold/40">
+                        <img src="{{ project.primary_image.url }}" alt="{{ project.project_title }} primary" class="w-full h-full object-cover transform group-hover:scale-108 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <i class="bi bi-zoom-in text-white text-2xl"></i>
+                        </div>
+                        <span class="absolute bottom-2 left-2 bg-brand-gold text-white text-[9px] font-bold px-2 py-0.5 rounded shadow">Cover</span>
+                    </a>
+                    {% endif %}
+
+                    <!-- ProjectPictures -->
+                    {% for pic in project.projectpictures_set.all %}
+                    <a href="{{ pic.image.url }}" data-gallery="property-gallery" class="glightbox block relative overflow-hidden rounded-xl aspect-[4/3] group shadow-sm bg-slate-100">
+                        <img src="{{ pic.image.url }}" alt="{{ project.project_title }} gallery" class="w-full h-full object-cover transform group-hover:scale-108 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <i class="bi bi-zoom-in text-white text-2xl"></i>
+                        </div>
+                    </a>
+                    {% endfor %}
+                    
+                    <!-- GalleryImages ManyToMany -->
+                    {% for img in project.gallery_images.all %}
+                    <a href="{{ img.file_path.url }}" data-gallery="property-gallery" class="glightbox block relative overflow-hidden rounded-xl aspect-[4/3] group shadow-sm bg-slate-100">
+                        <img src="{{ img.file_path.url }}" alt="{{ project.project_title }} gallery" class="w-full h-full object-cover transform group-hover:scale-108 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <i class="bi bi-zoom-in text-white text-2xl"></i>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Right Side: Sticky Contact & Enquiry Form -->
+        <div class="lg:col-span-1">
+            <div class="sticky top-28 space-y-6">
+                
+                <!-- Contact Card -->
+                <div class="glass-card bg-white rounded-2xl shadow-md border border-slate-100 p-6 md:p-8">
+                    <h4 class="font-serif text-lg font-bold text-brand-navy mb-4">Interested in this property?</h4>
+                    <p class="text-xs text-slate-500 font-light mb-6">
+                        Speak directly with our dedicated property advisors or submit an enquiry below.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <a href="tel:+918848342321" class="flex items-center space-x-3.5 p-3 rounded-xl bg-brand-navy hover:bg-brand-blue text-white transition-colors">
+                            <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-brand-gold shrink-0">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-slate-300 block uppercase tracking-wider font-light">Call Advisor</span>
+                                <span class="font-bold text-sm">+91 8848 342 321</span>
+                            </div>
+                        </a>
+                        
+                        <a href="https://wa.me/918848342321?text=Hi,%20I'm%20interested%2520in%20the%20property%20titled:%20{{ project.project_title }}" target="_blank" class="flex items-center space-x-3.5 p-3 rounded-xl bg-brand-green hover:bg-emerald-700 text-white transition-colors">
+                            <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                                <i class="bi bi-whatsapp"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-slate-100 block uppercase tracking-wider font-light">WhatsApp Direct</span>
+                                <span class="font-bold text-sm">Send Instant Message</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Simple Enquiry Form -->
+                    <form action="{% url 'Contact' %}" method="POST" class="space-y-4 border-t border-slate-150 pt-6">
+                        {% csrf_token %}
+                        <input type="hidden" name="subject" value="Inquiry for Property: {{ project.project_title }}">
+                        
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">Your Name</label>
+                            <input type="text" name="name" required class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-brand-blue text-slate-700">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">Phone Number</label>
+                            <input type="tel" name="phone" required class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-brand-blue text-slate-700">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold uppercase text-slate-500 tracking-wider block">Message</label>
+                            <textarea name="message" rows="3" required class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-brand-blue text-slate-700">I am interested in {{ project.project_title }}. Please call me back with pricing and details.</textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-2.5 bg-brand-gold hover:bg-brand-goldDark text-brand-navy font-bold rounded-lg text-xs tracking-wider uppercase transition-colors shadow-sm mt-2">
+                            Submit Enquiry
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Related Properties -->
+    {% if related_projects %}
+    <div class="mt-20 pt-10 border-t border-slate-200">
+        <h3 class="font-serif text-2xl font-bold text-brand-navy mb-8">Related Property Deals</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% for rel in related_projects %}
+                {% include 'partials/property_card.html' with prop=rel %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new Swiper('.heroSwiper', {
+            loop: true,
+            autoplay: {
+                delay: 4500,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            }
+        });
+    });
+</script>
+{% endblock %}

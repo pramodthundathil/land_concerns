@@ -1,0 +1,157 @@
+{% extends 'dashboard/index.html' %}{% load static %}{% block admin %}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title fw-semibold mb-4">Careers Upload</h5>
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <strong></strong> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+            <div class="card">
+                <div class="card-body p-4">
+                    <button type="button" class="btn btn-primary m-1" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Post Job</button>
+                    <a href="" class=" m-1">Go to Applications</a>
+                </div>
+                <!-- -------------------------------------------------------------------- -->
+                <!-- Modal2 -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Post Jobs</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="{%url 'job_create' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="title">Job Title</label>
+                                        <input type="text" name="title" class="form-control" id="title" placeholder="Enter Job Title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="experience">Experience</label>
+                                        <input type="text" name="experience" class="form-control" id="experience" placeholder="Enter Required Experience">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="education">Education</label>
+                                        <input type="text" name="education" class="form-control" id="education" placeholder="Enter Education Requirement">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Job Description</label>
+                                        <textarea name="description" class="form-control" id="description" rows="4" placeholder="Enter Job Description"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="salary">Salary</label>
+                                        <input type="text" name="salary" class="form-control" id="salary" placeholder="Enter Salary">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="location">Location</label>
+                                        <input type="text" name="location" class="form-control" id="location" placeholder="Enter Job Location">
+                                    </div>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- -------------------------------------------------------------------- -->
+
+            </div>
+            <h5 class="card-title fw-semibold mb-4">Posted Jobs</h5>
+            <div class="card">
+                <div class="card-body p-4">
+                    <table class="table table-stripped">
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Date of Post</th>
+                            <th>Experiance</th>
+                            <th>Education</th>
+                            <th>Action</th>
+                        </tr>
+
+                        {% for item in jobs %}
+
+                        <tr>
+                            <td>
+                            {{item.title}}
+                            </td>
+                            <td>{{item.posted_on}}</td>
+                            <td>{{item.experience}}</td>
+                            <td>{{item.education}}</td>
+                            <td>
+
+                                <a href="{%url 'JobSingleView' item.id %}" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-custom-class="custom-tooltip"
+                                data-bs-title="Edit Job" class="text-info" style="font-size: 20px !important;">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{%url 'JobDelete' item.id %}" onclick="return confirm('Are you want to delete this Job Permanently ?')" class="text-danger" style="font-size: 20px !important;">
+                                    <i class="bi bi-trash3"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+                </div>
+            </div>
+
+
+            <h5 class="card-title fw-semibold mb-4">Job Applications</h5>
+            <div class="card">
+                <div class="card-body p-4">
+                    <table class="table table-stripped">
+                        <tr>
+                            <th>Name</th>
+                            <th>Applied Job</th>
+                            <th>Date of Apply</th>
+                            <th>Phone Number</th>
+                            <th>Action</th>
+                        </tr>
+
+                        {% for item in applications %}
+
+                        <tr>
+                            <td>
+                                {{item.first_name}} {{item.last_name}}
+                            </td>
+                            <td>{{item.job}}</td>
+                            <td>{{item.submitted_at}}</td>
+                            <td>{{item.phone_number}}</td>
+                            <td>
+
+                                <a href="{%url 'JobApplicationSingleView' item.id %}" class="text-info" style="font-size: 20px !important;">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                                <a href="{%url 'delete_application' item.id %}" onclick="return confirm('Are you want to delete this application permanently ?')" class="text-danger" style="font-size: 20px !important;">
+                                    <i class="bi bi-trash3"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us | Land Concern's Land Dealers & Developers{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="relative bg-brand-navy pt-32 pb-20 overflow-hidden text-center text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-blue/30 via-transparent to-transparent opacity-60"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10 space-y-4">
+        <span class="text-brand-gold font-semibold text-xs md:text-sm uppercase tracking-[0.25em] block" data-aos="fade-down">
+            Get In Touch
+        </span>
+        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight" data-aos="fade-up" data-aos-delay="100">
+            Contact Our Advisors
+        </h1>
+        <p class="text-slate-300 font-light max-w-xl mx-auto text-xs sm:text-sm" data-aos="fade-up" data-aos-delay="200">
+            We are here to assist you with legal verification checks, property site visits, and customized development quotes.
+        </p>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <!-- Django Success Messages -->
+    {% if messages %}
+    <div class="mb-8 max-w-4xl mx-auto" data-aos="fade-down">
+        {% for message in messages %}
+        <div class="p-4 rounded-xl bg-brand-green/10 border border-brand-green/30 text-brand-green text-sm flex items-center justify-between shadow-sm">
+            <div class="flex items-center space-x-2.5">
+                <i class="bi bi-check-circle-fill text-base"></i>
+                <span class="font-medium">Enquiry submitted successfully! Our advisors will connect with you shortly.</span>
+            </div>
+            <button class="text-brand-green hover:opacity-75 focus:outline-none" onclick="this.parentElement.remove()">
+                <i class="bi bi-x-lg text-xs"></i>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <!-- Left Side: Contact Cards & Map -->
+        <div class="lg:col-span-5 space-y-8" data-aos="fade-right">
+            <div class="space-y-6">
+                <!-- Address -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-brand-navy text-brand-gold flex items-center justify-center text-xl shrink-0 shadow-sm">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-bold text-brand-navy text-base mb-1">Corporate Address</h4>
+                        <p class="text-slate-550 font-light text-sm leading-relaxed">
+                            Parayil Building, Manjummel,<br>Ernakulam - 683501, Kerala
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Phones -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-brand-navy text-brand-gold flex items-center justify-center text-xl shrink-0 shadow-sm">
+                        <i class="bi bi-telephone-fill"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-bold text-brand-navy text-base mb-1">Call Phone Contacts</h4>
+                        <p class="text-slate-555 font-light text-sm">
+                            <a href="tel:+918848342321" class="hover:text-brand-blue transition-colors font-semibold block">+91 8848 342 321</a>
+                            <a href="tel:+919388176595" class="hover:text-brand-blue transition-colors font-semibold block">+91 9388 176 595</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-brand-navy text-brand-gold flex items-center justify-center text-xl shrink-0 shadow-sm">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-bold text-brand-navy text-base mb-1">Email Communication</h4>
+                        <p class="text-slate-555 font-light text-sm">
+                            <a href="mailto:brgpillai1965@gmail.com" class="hover:text-brand-blue transition-colors font-semibold">brgpillai1965@gmail.com</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Embedded Interactive Map (Manjummel Location) -->
+            <div class="rounded-2xl overflow-hidden shadow-sm border border-slate-100 aspect-[4/3] bg-slate-100">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.528373187216!2d76.29959637583687!3d10.055745972049294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d0d5bfa7cd3%3A0xe54e6fe8423e20ec!2sManjummel%2C%20Kochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1716100000000!5m2!1sen!2sin" 
+                    class="w-full h-full border-0" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Right Side: Contact Form -->
+        <div class="lg:col-span-7" data-aos="fade-left">
+            <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-6">
+                <h3 class="font-serif text-xl sm:text-2xl font-bold text-brand-navy pb-3 border-b border-slate-150">
+                    Submit Lead Enquiry
+                </h3>
+                
+                <form action="{% url 'Contact' %}" method="POST" class="space-y-5">
+                    {% csrf_token %}
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold uppercase text-slate-500 tracking-wider block">Your Full Name</label>
+                            <input type="text" name="name" required placeholder="John Doe" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-4 text-xs focus:outline-none focus:border-brand-blue text-slate-700">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold uppercase text-slate-500 tracking-wider block">Phone Number</label>
+                            <input type="tel" name="phone" required placeholder="+91 98765 43210" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-4 text-xs focus:outline-none focus:border-brand-blue text-slate-700">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase text-slate-500 tracking-wider block">Subject / Property Reference</label>
+                        <input type="text" name="subject" required placeholder="Inquiry about Plots in Aluva / Villa Layouts" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-4 text-xs focus:outline-none focus:border-brand-blue text-slate-700">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold uppercase text-slate-500 tracking-wider block">Your Detailed Message</label>
+                        <textarea name="message" rows="5" required placeholder="Tell us about your property requirements, budget, and desired location details..." class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-4 text-xs focus:outline-none focus:border-brand-blue text-slate-700"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-brand-navy hover:bg-brand-blue text-white font-bold py-3.5 rounded-lg text-xs tracking-widest uppercase transition-all duration-300 shadow-md">
+                        Submit Message &rarr;
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

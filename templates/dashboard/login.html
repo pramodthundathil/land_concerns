@@ -1,0 +1,53 @@
+{% extends 'index.html'%}
+{% load static %} 
+{% block content %}
+    <style>
+        .loginpage{
+            max-width: 520px;
+            padding: 30px;
+            margin: auto;
+            margin-top: 100px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            text-align: center;
+
+        }
+        .loginpage input{
+            width:90%;
+            padding: 10px;
+            border: .5px solid #3673b2;
+            margin-bottom: 10px;
+        }
+    </style>
+
+   
+    <div class="container mt-5 mb-5">
+        <div class="loginpage">
+            <h3 style="color:#3673b2 ;">SignIn</h3>
+            {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>!</strong> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="text"  placeholder="Username" name="uname" required>
+                <input type="password" placeholder="Password" name="pswd" required><br>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Given year
+        let givenYear = 1989;
+
+        // Get the current year
+        let currentYear = new Date().getFullYear();
+
+        // Calculate the year gap
+        let yearGap = currentYear - givenYear;
+
+        document.getElementById("yeargap").innerHTML = yearGap
+
+    </script>
+{% endblock %}

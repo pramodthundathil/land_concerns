@@ -1,0 +1,1003 @@
+{% extends 'dashboard/index.html' %}{% load static %}{% block admin %}
+
+<div class="card">
+    <div class="card-body">
+
+
+        <div class="gallery-container">
+            <div class="page-header">
+                <h1>{{ action }} Page</h1>
+                <a href="{% url 'page_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+
+            <div class="form-container"
+                style="background:white;padding:30px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Please correct the following errors:</strong>
+                        <ul>
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="id_code" class="form-label">Code <span style="color:red;">*</span></label>
+                                {{ form.code }}
+                                {% if form.code.help_text %}
+                                <small class="form-text text-muted">{{ form.code.help_text }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="id_status" class="form-label">Status <span
+                                        style="color:red;">*</span></label>
+                                {{ form.status }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_title" class="form-label">Title <span style="color:red;">*</span></label>
+                        {{ form.title }}
+                    </div>
+                    <!-- Form Media ensures CKEditor/Widgets assets are loaded -->
+                    {{ form.media }}
+
+                    <div class="form-group mb-3">
+                        <label for="id_page_type" class="form-label">Page Type</label>
+                        {{ form.page_type }}
+                        <small class="form-text text-muted">Controls the layout and available fields.</small>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_description" class="form-label">Description (Main Content)</label>
+                        {{ form.description }}
+                    </div>
+
+                    <div class="row">
+                        <!-- Media (Image) Column -->
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Media (Image)</label>
+                                <div class="media-selector-container">
+                                    {{ form.media_lib }} <!-- Hidden Input for Image -->
+                                    <div id="pageMediaPreview" class="media-preview-box"
+                                        style="margin-bottom: 10px; border: 1px dashed #ced4da; padding: 10px; text-align: center; border-radius: 4px; min-height: 100px; display: flex; align-items: center; justify-content: center;">
+                                        {% if page.media %}
+                                        <img src="{{ page.media.file_path.url }}"
+                                            style="max-width: 100%; max-height: 200px; height: auto;">
+                                        {% else %}
+                                        <p class="text-muted mb-0">No image selected</p>
+                                        {% endif %}
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary btn-block"
+                                        onclick="openMediaLibrary('image')">
+                                        <i class="fas fa-image"></i> Select Image
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm mt-2"
+                                        onclick="clearMedia('image')"
+                                        style="{% if not page.media %}display:none;{% endif %} width: 100%;"
+                                        id="clearImageBtn">
+                                        <i class="fas fa-trash"></i> Remove Image
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Video Column -->
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Video (File)</label>
+                                <div class="media-selector-container">
+                                    {{ form.video }} <!-- Hidden Input for Video (was Select) -->
+                                    <div id="pageVideoPreview" class="media-preview-box"
+                                        style="margin-bottom: 10px; border: 1px dashed #ced4da; padding: 10px; text-align: center; border-radius: 4px; min-height: 100px; display: flex; align-items: center; justify-content: center;">
+                                        {% if page.video %}
+                                        {% if page.video.file_path %}
+                                        <video controls style="max-width: 100%; max-height: 200px;">
+                                            <source src="{{ page.video.file_path.url }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        {% else %}
+                                        <p>Video file missing</p>
+                                        {% endif %}
+                                        {% else %}
+                                        <p class="text-muted mb-0">No video selected</p>
+                                        {% endif %}
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary btn-block"
+                                        onclick="openMediaLibrary('video')">
+                                        <i class="fas fa-film"></i> Select Video
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm mt-2"
+                                        onclick="clearMedia('video')"
+                                        style="{% if not page.video %}display:none;{% endif %} width: 100%;"
+                                        id="clearVideoBtn">
+                                        <i class="fas fa-trash"></i> Remove Video
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery Section -->
+                    <div id="gallery-section"
+                        style="display:none; border: 1px solid #eee; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                        <h4>Gallery Content</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Gallery Images</label>
+                                {{ form.gallery_images }} <!-- Hidden Multiple Select -->
+                                <div id="galleryImagesList" class="media-grid"
+                                    style="max-height: 300px; overflow-y: auto; border: 1px dashed #ccc; padding: 10px; margin-bottom: 10px;">
+                                    <!-- Rendered items go here -->
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                    onclick="openMediaLibrary('gallery_image')">Add Image</button>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Gallery Videos</label>
+                                {{ form.gallery_videos }} <!-- Hidden Multiple Select -->
+                                <div id="galleryVideosList" class="media-grid"
+                                    style="max-height: 300px; overflow-y: auto; border: 1px dashed #ccc; padding: 10px; margin-bottom: 10px;">
+                                    <!-- Rendered items go here -->
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                    onclick="openMediaLibrary('gallery_video')">Add Video</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custom CSS & Extra Data -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="id_custom_css" class="form-label">Custom CSS</label>
+                                {{ form.custom_css }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Extra Data (JSON Configuration)</label>
+                                {{ form.extra_data }}
+                                <div id="extraDataBuilder"
+                                    style="border: 1px solid #ced4da; padding: 10px; border-radius: 4px;">
+                                    <table class="table table-sm table-borderless" id="extraDataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Key</th>
+                                                <th>Value</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                    <button type="button" class="btn btn-sm btn-info" onclick="addExtraDataRow()">+ Add
+                                        Row</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_parent_id" class="form-label">Parent Page</label>
+                        {{ form.parent_id }}
+                        <small class="form-text text-muted">Select a parent page to create a sub-page</small>
+                    </div>
+
+                    <hr style="margin:25px 0;">
+
+                    <h5 style="margin-bottom:20px;color:var(--text-dark);">SEO Settings</h5>
+
+                    <div class="form-group mb-3">
+                        <label for="id_browser_title" class="form-label">Browser Title</label>
+                        {{ form.browser_title }}
+                        <small class="form-text text-muted">Title shown in browser tab and search results</small>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_meta_description" class="form-label">Meta Description</label>
+                        {{ form.meta_description }}
+                        <small class="form-text text-muted">Brief description for search engines (150-160
+                            characters)</small>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_meta_keywords" class="form-label">Meta Keywords</label>
+                        {{ form.meta_keywords }}
+                        <small class="form-text text-muted">Keywords separated by commas</small>
+                    </div>
+
+                    <hr style="margin:25px 0;">
+
+                    <h5 style="margin-bottom:20px;color:var(--text-dark);">Button Settings</h5>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check mb-3">
+                                {{ form.apply_button_top }}
+                                <label class="form-check-label" for="id_apply_button_top">
+                                    Show Apply Button at Top
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check mb-3">
+                                {{ form.apply_button_bottom }}
+                                <label class="form-check-label" for="id_apply_button_bottom">
+                                    Show Apply Button at Bottom
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions"
+                        style="margin-top:30px;padding-top:20px;border-top:1px solid var(--gray-200);">
+                        <button type="submit" class="btn btn-primary" style="min-width:120px;">
+                            <i class="fas fa-save"></i> {{ action }}
+                        </button>
+                        <a href="{% url 'page_list' %}" class="btn btn-secondary" style="min-width:120px;">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Media Library Modal (Reused) -->
+        <div id="mediaLibraryModal" class="modal">
+            <div class="modal-content modal-xl">
+                <div class="modal-header">
+                    <h2><i class="fas fa-images"></i> Media Library</h2>
+                    <button class="close-modal" type="button" onclick="closeMediaLibrary()">&times;</button>
+                </div>
+                <div class="modal-body" style="padding: 0;">
+                    <div class="media-tabs">
+                        <button type="button" class="media-tab active" onclick="switchMediaTab('library')">Media
+                            Library</button>
+                        <button type="button" class="media-tab" onclick="switchMediaTab('upload')">Upload New</button>
+                    </div>
+
+                    <!-- Library Tab -->
+                    <div id="libraryTab" class="media-tab-content active">
+                        <div class="library-controls">
+                            <input type="text" id="mediaSearch" placeholder="Search media..." class="form-control"
+                                style="width: 300px;">
+                        </div>
+                        <div id="mediaGrid" class="media-grid">
+                            <div class="loading-spinner">Loading...</div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="pagination-controls">
+                            <button type="button" id="prevPageBtn" class="btn btn-sm btn-secondary"
+                                onclick="changeMediaPage(-1)" disabled>Previous</button>
+                            <span id="pageIndicator">Page 1</span>
+                            <button type="button" id="nextPageBtn" class="btn btn-sm btn-secondary"
+                                onclick="changeMediaPage(1)" disabled>Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Upload Tab -->
+                    <div id="uploadTab" class="media-tab-content">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Caption / Description</label>
+                                <textarea id="mediaDescriptionInput" class="form-control" rows="2"
+                                    placeholder="Enter caption for image or video..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 border-end">
+                                <h5>Upload File</h5>
+                                <div class="upload-area" id="uploadArea">
+                                    <i class="fas fa-cloud-upload-alt fa-3x"></i>
+                                    <h3>Drag & Drop files here</h3>
+                                    <p>or</p>
+                                    <input type="file" id="mediaUploadInput" hidden>
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="document.getElementById('mediaUploadInput').click()">Browse
+                                        Files</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Add from YouTube</h5>
+                                <div class="youtube-add-area p-4 text-center">
+                                    <i class="fab fa-youtube fa-3x text-danger mb-3"></i>
+                                    <input type="text" id="youtubeUrlInput" class="form-control mb-3"
+                                        placeholder="Paste YouTube URL here...">
+                                    <button type="button" class="btn btn-danger" onclick="handleAddYouTube()">Add
+                                        YouTube Video</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="uploadProgress" style="display: none; margin-top: 20px;">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="uploadProgressBar" style="width: 0%"></div>
+                            </div>
+                            <p id="uploadStatusText">Uploading...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="selected-media-info" id="selectedMediaInfo" style="margin-right: auto; display: none;">
+                        Selected: <span id="selectedMediaName"></span>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="closeMediaLibrary()">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="useMediaBtn" onclick="useSelectedMedia()"
+                        disabled>Use
+                        Selected Media</button>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            /* Reusing Media Library Styles */
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                overflow-y: auto;
+            }
+
+            .modal-content {
+                background-color: #fefefe;
+                margin: 50px auto;
+                padding: 0;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                width: 90%;
+                max-width: 600px;
+                position: relative;
+            }
+
+            .modal-xl {
+                max-width: 1100px;
+            }
+
+            .modal-header {
+                padding: 15px 20px;
+                border-bottom: 1px solid #eee;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .modal-footer {
+                padding: 15px 20px;
+                border-top: 1px solid #eee;
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+
+            .close-modal {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #666;
+            }
+
+            /* Media Library Specific Styles */
+            .media-tabs {
+                display: flex;
+                border-bottom: 1px solid #ddd;
+                padding: 0 20px;
+                margin-top: 10px;
+            }
+
+            .media-tab {
+                padding: 10px 20px;
+                background: none;
+                border: none;
+                border-bottom: 2px solid transparent;
+                cursor: pointer;
+                font-weight: 500;
+                color: #666;
+            }
+
+            .media-tab.active {
+                color: var(--primary-color);
+                border-bottom-color: var(--primary-color);
+            }
+
+            .media-tab-content {
+                display: none;
+                padding: 20px;
+            }
+
+            .media-tab-content.active {
+                display: block;
+            }
+
+            .media-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+                max-height: 500px;
+                overflow-y: auto;
+                padding: 5px;
+            }
+
+            .media-item {
+                border: 2px solid #eee;
+                border-radius: 6px;
+                cursor: pointer;
+                overflow: hidden;
+                transition: all 0.2s;
+                position: relative;
+            }
+
+            .media-item:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .media-item.selected {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+            }
+
+            .media-thumb {
+                width: 100%;
+                aspect-ratio: 16/9;
+                background: #f8f9fa;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .media-thumb img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+            }
+
+            .media-name {
+                padding: 8px;
+                font-size: 0.85rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                background: #fff;
+            }
+
+            .upload-area {
+                border: 2px dashed #ddd;
+                border-radius: 8px;
+                padding: 40px;
+                text-align: center;
+                cursor: pointer;
+                transition: border-color 0.2s;
+            }
+
+            .upload-area:hover {
+                border-color: var(--primary-color);
+                background: #f8faff;
+            }
+
+            .loading-spinner {
+                text-align: center;
+                padding: 20px;
+                color: #666;
+                grid-column: 1/-1;
+            }
+
+            .pagination-controls {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 15px;
+                margin-top: 15px;
+                padding-top: 15px;
+                border-top: 1px solid #eee;
+            }
+
+            .progress-bar-container {
+                width: 100%;
+                height: 10px;
+                background-color: #f0f0f0;
+                border-radius: 5px;
+                overflow: hidden;
+            }
+
+            .progress-bar {
+                height: 100%;
+                background-color: var(--primary-color);
+                transition: width 0.3s ease;
+            }
+        </style>
+
+        <script>
+            // Media Library Logic
+            let currentMediaPage = 1;
+            let selectedMediaId = null;
+            let selectedMediaUrl = null;
+            let currentTargetType = null; // 'image' or 'video'
+
+            function openMediaLibrary(type) {
+                currentTargetType = type;
+                document.getElementById('mediaLibraryModal').style.display = 'block';
+                loadMediaLibrary(1);
+            }
+
+            function closeMediaLibrary() {
+                document.getElementById('mediaLibraryModal').style.display = 'none';
+                selectedMediaId = null;
+                selectedMediaUrl = null;
+                document.querySelectorAll('.media-item').forEach(item => item.classList.remove('selected'));
+                document.getElementById('selectedMediaInfo').style.display = 'none';
+                document.getElementById('useMediaBtn').disabled = true;
+            }
+
+            function switchMediaTab(tabName) {
+                document.querySelectorAll('.media-tab').forEach(tab => tab.classList.remove('active'));
+                // Use a query selector to find the button that calls this function with the same argument
+                const activeTabBtn = document.querySelector(`.media-tab[onclick="switchMediaTab('${tabName}')"]`);
+                if (activeTabBtn) activeTabBtn.classList.add('active');
+
+                document.querySelectorAll('.media-tab-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(tabName + 'Tab').classList.add('active');
+            }
+
+            async function loadMediaLibrary(page) {
+                currentMediaPage = page;
+                const search = document.getElementById('mediaSearch').value;
+                const grid = document.getElementById('mediaGrid');
+                grid.innerHTML = '<div class="loading-spinner">Loading...</div>';
+
+                try {
+                    // Corrected Path: Removed /menu/ prefix and using updated /site/ prefix if user changed urls.py
+                    // NOTE: User changed urls.py to include 'site/' prefix.
+                    const response = await fetch(`/site/admin/media/json/?page=${page}&search=${search}`);
+                    const result = await response.json();
+
+                    if (result.success) {
+                        renderMediaGrid(result.data);
+                        updatePagination(result.has_next, result.next_page);
+                    } else {
+                        grid.innerHTML = '<p class="text-center">Failed to load media.</p>';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    grid.innerHTML = '<p class="text-center">Error loading media.</p>';
+                }
+            }
+
+            function renderMediaGrid(items) {
+                const grid = document.getElementById('mediaGrid');
+                grid.innerHTML = '';
+                if (items.length === 0) {
+                    grid.innerHTML = '<p class="text-center" style="grid-column: 1/-1;">No media found.</p>';
+                    return;
+                }
+
+                // Filter based on target type (optional, but good UX)
+                // If you want to show only videos when selecting for video field
+                // items = items.filter(item => { /*Logic if needed*/ })
+
+                items.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = `media-item ${selectedMediaId === item.id ? 'selected' : ''}`;
+                    div.onclick = () => selectMedia(item.id, item.url, item.name, item.type);
+                    div.innerHTML = `
+                <div class="media-thumb"><img src="${item.thumb}" alt="${item.name}"></div>
+                <div class="media-name">${item.name}</div>
+            `;
+                    grid.appendChild(div);
+                });
+            }
+
+            function selectMedia(id, url, name, type) {
+                selectedMediaId = id;
+                selectedMediaUrl = url;
+                selectedMediaType = type;
+                document.querySelectorAll('.media-item').forEach(item => item.classList.remove('selected'));
+                event.currentTarget.classList.add('selected');
+                document.getElementById('selectedMediaInfo').style.display = 'block';
+                document.getElementById('selectedMediaName').textContent = name;
+                document.getElementById('useMediaBtn').disabled = false;
+            }
+
+
+
+            function addToGallery(id, url, name, thumb, type) {
+                const listId = type === 'gallery_image' ? 'galleryImagesList' : 'galleryVideosList';
+                const selectId = type === 'gallery_image' ? 'id_gallery_images' : 'id_gallery_videos';
+
+                const select = document.getElementById(selectId);
+                const list = document.getElementById(listId);
+
+                // Add to Select
+                let exists = false;
+                for (let i = 0; i < select.options.length; i++) {
+                    if (select.options[i].value == id) {
+                        select.options[i].selected = true;
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    const newOpt = document.createElement('option');
+                    newOpt.value = id;
+                    newOpt.text = name;
+                    newOpt.selected = true;
+                    select.appendChild(newOpt);
+                }
+
+                // Add to UI List
+                // Check if already in UI list
+                if (document.getElementById(`gallery-item-${type}-${id}`)) return;
+
+                const div = document.createElement('div');
+                div.id = `gallery-item-${type}-${id}`;
+                div.className = 'media-item';
+                div.innerHTML = `
+                   <div style="position:relative;">
+                        <div class="media-thumb"><img src="${thumb}" alt="${name}"></div>
+                        <div class="media-name">${name}</div>
+                        <button type="button" class="btn btn-danger btn-xs" 
+                            style="position:absolute; top:5px; right:5px;"
+                            onclick="removeGalleryItem('${type}', ${id})">X</button>
+                   </div>
+                `;
+                list.appendChild(div);
+            }
+
+            function removeGalleryItem(type, id) {
+                const selectId = type === 'gallery_image' ? 'id_gallery_images' : 'id_gallery_videos';
+                const select = document.getElementById(selectId);
+
+                // Unselect
+                for (let i = 0; i < select.options.length; i++) {
+                    if (select.options[i].value == id) {
+                        select.options[i].selected = false;
+                        break;
+                    }
+                }
+
+                // Remove UI
+                const item = document.getElementById(`gallery-item-${type}-${id}`);
+                if (item) item.remove();
+            }
+
+            // Extra Data Builder Logic
+            function initExtraData() {
+                const hiddenInput = document.getElementById('id_extra_data');
+                const tableBody = document.querySelector('#extraDataTable tbody');
+                let data = {};
+                try {
+                    data = JSON.parse(hiddenInput.value || '{}');
+                } catch (e) { }
+
+                Object.keys(data).forEach(key => addExtraDataRow(key, data[key]));
+            }
+
+            function addExtraDataRow(key = '', value = '') {
+                const tbody = document.querySelector('#extraDataTable tbody');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><input type="text" class="form-control form-control-sm key-input" value="${key}" placeholder="Key" oninput="serializeExtraData()"></td>
+                    <td><input type="text" class="form-control form-control-sm value-input" value="${value}" placeholder="Value" oninput="serializeExtraData()"></td>
+                    <td><button type="button" class="btn btn-sm btn-danger" onclick="this.closest('tr').remove(); serializeExtraData();">X</button></td>
+                `;
+                tbody.appendChild(tr);
+            }
+
+            function serializeExtraData() {
+                const rows = document.querySelectorAll('#extraDataTable tbody tr');
+                const data = {};
+                rows.forEach(row => {
+                    const key = row.querySelector('.key-input').value.trim();
+                    const value = row.querySelector('.value-input').value.trim();
+                    if (key) data[key] = value;
+                });
+                document.getElementById('id_extra_data').value = JSON.stringify(data);
+            }
+
+            // Initialization
+            document.addEventListener('DOMContentLoaded', function () {
+                // Toggle sections on load
+                togglePageSections();
+                // Init extra data
+                initExtraData();
+
+                // Load existing gallery items if any are selected
+                initGalleryList('gallery_image');
+                initGalleryList('gallery_videos'); // Note name plural match with model field related_name vs form field?
+                // Actually form fields are gallery_images and gallery_videos
+            });
+
+            function initGalleryList(type) {
+                // type is used for UI ID logic. 'gallery_image' -> id_gallery_images
+                const selectId = type === 'gallery_image' ? 'id_gallery_images' : 'id_gallery_videos';
+                const select = document.getElementById(selectId);
+                if (!select) return;
+
+                // How to get thumb/name from hidden options? properties like data-thumb aren't standard.
+                // We might need to fetch info or rely on what we have. 
+                // If the options just have textual labels (filename), we can use that for name.
+                // Thumb is harder. 
+
+                // Workaround: We will just list names unless we fetch details.
+                // Or better, we can assume the option label is the name.
+
+                Array.from(select.options).forEach(opt => {
+                    if (opt.selected) {
+                        // Add to UI without thumb if we can't get it easily, or use placeholder.
+                        // Ideally we pass a JS object with initial data from view, but let's just use placeholder.
+                        const listId = type === 'gallery_image' ? 'galleryImagesList' : 'galleryVideosList';
+                        const list = document.getElementById(listId);
+
+                        const div = document.createElement('div');
+                        div.id = `gallery-item-${type}-${opt.value}`;
+                        div.className = 'media-item';
+                        div.innerHTML = `
+                           <div style="position:relative;">
+                                <div class="media-thumb" style="display:flex;align-items:center;justify-content:center;background:#eee;">
+                                    <span>${type === 'gallery_image' ? 'IMG' : 'VID'}</span>
+                                </div>
+                                <div class="media-name">${opt.text}</div>
+                                <button type="button" class="btn btn-danger btn-xs" 
+                                    style="position:absolute; top:5px; right:5px;"
+                                    onclick="removeGalleryItem('${type}', ${opt.value})">X</button>
+                           </div>
+                        `;
+                        list.appendChild(div);
+                    }
+                });
+            }
+
+            function togglePageSections() {
+                const type = document.getElementById('id_page_type').value;
+                const galleryParams = document.getElementById('gallery-section');
+
+                if (type === 'gallery') {
+                    galleryParams.style.display = 'block';
+                } else {
+                    galleryParams.style.display = 'none';
+                }
+
+                // Add more conditions for 'project' if we add specific project UI
+            }
+
+            document.getElementById('id_page_type').addEventListener('change', togglePageSections);
+
+            function useSelectedMedia() {
+                if (!selectedMediaId) return;
+
+                if (currentTargetType === 'image') {
+                    document.getElementById('id_media_lib').value = selectedMediaId;
+                    const previewBox = document.getElementById('pageMediaPreview');
+                    previewBox.innerHTML = `<img src="${selectedMediaUrl}" style="max-width: 100%; max-height: 200px; height: auto;">`;
+                    document.getElementById('clearImageBtn').style.display = 'block';
+                } else if (currentTargetType === 'video') {
+                    document.getElementById('id_video').value = selectedMediaId;
+                    const previewBox = document.getElementById('pageVideoPreview');
+
+                    if (selectedMediaType === 'video' || selectedMediaUrl.endsWith('.mp4') || selectedMediaUrl.endsWith('.webm')) {
+                        previewBox.innerHTML = `
+                            <video controls style="max-width: 100%; max-height: 200px;">
+                                <source src="${selectedMediaUrl}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>`;
+                    } else {
+                        previewBox.innerHTML = `<p>File selected: ${selectedMediaUrl.split('/').pop()}</p>`;
+                    }
+
+                    document.getElementById('clearVideoBtn').style.display = 'block';
+                } else if (currentTargetType === 'gallery_image') {
+                    // Gallery Image
+                    addToGallery(selectedMediaId, selectedMediaUrl, document.getElementById('selectedMediaName').textContent, selectedMediaUrl, 'gallery_image');
+                } else if (currentTargetType === 'gallery_video') {
+                    // Gallery Video
+                    // Use thumb or placeholder for video
+                    let thumb = '/static/admin/img/video-icon.png';
+                    addToGallery(selectedMediaId, selectedMediaUrl, document.getElementById('selectedMediaName').textContent, thumb, 'gallery_video');
+                }
+
+                closeMediaLibrary();
+            }
+
+            function clearMedia(type) {
+                if (type === 'image') {
+                    document.getElementById('id_media_lib').value = '';
+                    document.getElementById('pageMediaPreview').innerHTML = '<p class="text-muted mb-0">No image selected</p>';
+                    document.getElementById('clearImageBtn').style.display = 'none';
+                } else if (type === 'video') {
+                    document.getElementById('id_video').value = '';
+                    document.getElementById('pageVideoPreview').innerHTML = '<p class="text-muted mb-0">No video selected</p>';
+                    document.getElementById('clearVideoBtn').style.display = 'none';
+                }
+            }
+
+            function updatePagination(hasNext, nextPage) {
+                document.getElementById('pageIndicator').textContent = `Page ${currentMediaPage}`;
+                document.getElementById('prevPageBtn').disabled = currentMediaPage === 1;
+                document.getElementById('nextPageBtn').disabled = !hasNext;
+            }
+
+            function changeMediaPage(delta) {
+                loadMediaLibrary(currentMediaPage + delta);
+            }
+
+            // File Upload Logic
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('mediaUploadInput');
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'var(--primary-color)';
+                uploadArea.style.backgroundColor = '#f0f7ff';
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ddd';
+                uploadArea.style.backgroundColor = 'transparent';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ddd';
+                uploadArea.style.backgroundColor = 'transparent';
+                const files = e.dataTransfer.files;
+                if (files.length > 0) handleFileUpload(files[0]);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) handleFileUpload(e.target.files[0]);
+            });
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            async function handleFileUpload(file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                // Add description
+                const description = document.getElementById('mediaDescriptionInput').value;
+                formData.append('description', description);
+
+                document.getElementById('uploadProgress').style.display = 'block';
+                document.getElementById('uploadProgressBar').style.width = '0%';
+                document.getElementById('uploadStatusText').textContent = 'Uploading ' + file.name + '...';
+
+                const csrftoken = getCookie('csrftoken');
+
+                try {
+                    const xhr = new XMLHttpRequest();
+                    // Corrected Path: Removed /menu/ prefix and using updated /site/ prefix if user changed urls.py
+                    // NOTE: User changed urls.py to include 'site/' prefix.
+                    xhr.open('POST', '/site/admin/media/upload/json/', true);
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+
+                    xhr.upload.onprogress = function (e) {
+                        if (e.lengthComputable) {
+                            const percentComplete = (e.loaded / e.total) * 100;
+                            document.getElementById('uploadProgressBar').style.width = percentComplete + '%';
+                        }
+                    };
+
+                    xhr.onload = function () {
+                        if (this.status === 200) {
+                            try {
+                                const result = JSON.parse(this.responseText);
+                                if (result.success) {
+                                    document.getElementById('mediaDescriptionInput').value = ''; // Clear description
+                                    switchMediaTab('library');
+                                    loadMediaLibrary(1); // Reload library
+                                } else {
+                                    alert('Upload failed: ' + result.message);
+                                }
+                            } catch (e) {
+                                console.error('JSON Parse Error:', e);
+                                console.log('Response Text:', this.responseText);
+                                alert('Invalid server response. Check console for details.');
+                            }
+                        } else {
+                            console.error('Upload Failed:', this.status, this.statusText);
+                            console.log('Response Text:', this.responseText);
+                            alert('Upload failed. Status: ' + this.status + '. Check console for details.');
+                        }
+                        document.getElementById('uploadProgress').style.display = 'none';
+                    };
+                    xhr.send(formData);
+                } catch (error) {
+                    console.error('Upload handling error:', error);
+                    alert('Upload failed to start.');
+                }
+            }
+
+            async function handleAddYouTube() {
+                const url = document.getElementById('youtubeUrlInput').value;
+                if (!url) {
+                    alert('Please enter a YouTube URL');
+                    return;
+                }
+
+                const description = document.getElementById('mediaDescriptionInput').value;
+                const formData = new FormData();
+                formData.append('youtube_url', url);
+                formData.append('description', description);
+
+                const csrftoken = getCookie('csrftoken');
+
+                // Reuse progress UI roughly
+                document.getElementById('uploadProgress').style.display = 'block';
+                document.getElementById('uploadProgressBar').style.width = '50%'; // Indeterminate
+                document.getElementById('uploadStatusText').textContent = 'Adding YouTube Video...';
+
+                try {
+                    const response = await fetch('/site/admin/media/upload/json/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    document.getElementById('uploadProgress').style.display = 'none';
+
+                    if (result.success) {
+                        document.getElementById('youtubeUrlInput').value = '';
+                        document.getElementById('mediaDescriptionInput').value = '';
+                        switchMediaTab('library');
+                        loadMediaLibrary(1);
+                    } else {
+                        alert('Failed to add video: ' + result.message);
+                    }
+                } catch (e) {
+                    console.error(e);
+                    document.getElementById('uploadProgress').style.display = 'none';
+                    alert('Error adding video.');
+                }
+            }
+        </script>
+
+
+    </div>
+</div>
+
+{% endblock %}

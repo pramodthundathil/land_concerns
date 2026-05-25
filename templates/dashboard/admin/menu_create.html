@@ -1,0 +1,37 @@
+{% extends 'dashboard/index.html' %}
+{% load static %}
+{% block admin %}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title fw-semibold mb-4">{{ page_title }}</h5>
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="id_name" class="form-label">Menu Name</label>
+                {{ form.name }}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_code" class="form-label">Menu Code</label>
+                {{ form.code }}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_menu_position" class="form-label">Position</label>
+                {{ form.menu_position }}
+            </div>
+
+            <div class="mb-3 form-check">
+                {{ form.status }}
+                <label class="form-check-label" for="id_status">Active</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Menu</button>
+            <a href="{% url 'menu_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% for item in items %}
+<li class="dd-item" data-id="{{ item.id }}">
+    <div class="dd-handle">
+        {{ item.title }}
+        {% if item.url %}<span class="text-muted small">({{ item.url }})</span>{% endif %}
+        {% if item.pages %}<span class="text-muted small">({{ item.pages.title }})</span>{% endif %}
+        {% if item.menu_type %}<span class="badge bg-secondary rounded-3" style="font-size: 0.6em;">{{ item.menu_type}}</span>{% endif %}
+
+        {% if item.target_blank %}<span class="badge bg-info rounded-3" style="font-size: 0.6em;" title="New Tab"><i
+                class="ti ti-external-link"></i></span>{% endif %}
+    </div>
+    <div class="dd-actions" style="position: absolute; top: 10px; right: 10px;">
+        <button type="button" class="btn btn-xs btn-info edit-item-btn" data-bs-toggle="modal"
+            data-bs-target="#itemModal" data-id="{{ item.id }}" data-title="{{ item.title }}"
+            data-url="{{ item.url|default_if_none:'' }}" data-type="{{ item.menu_type|default_if_none:'page' }}"
+            data-target="{{ item.target_blank|yesno:'true,false' }}" data-page="{{ item.pages.id|default_if_none:'' }}"
+            data-project="{{ item.project.id|default_if_none:'' }}"
+            data-service="{{ item.service.id|default_if_none:'' }}">
+            <i class="ti ti-pencil"></i>
+        </button>
+        <a href="{% url 'menu_item_delete' item.pk %}" class="btn btn-xs btn-danger"
+            onclick="return confirm('Delete item?')">
+            <i class="ti ti-trash"></i>
+        </a>
+    </div>
+
+    {% if item.children %}
+    <ol class="dd-list">
+        {% include "dashboard/admin/menu_item_recursive.html" with items=item.children %}
+    </ol>
+    {% endif %}
+</li>
+{% endfor %}

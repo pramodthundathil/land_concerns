@@ -1,0 +1,66 @@
+{% extends 'dashboard/index.html' %}{% load static %}{% block admin %}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title fw-semibold mb-4">Job Application for <span class="text-secondary">{{jobapplication.job.title}}</span></h5>
+            <a href="{%url 'JobsEdits' %}" class="text-info" style="font-size: larger;"><i class="bi bi-arrow-left-circle"></i> Back to Jobs</a>
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <strong></strong> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <h5 class="card-title fw-semibold mb-4">Application from <span class="text-primary">{{jobapplication.first_name}}</span></h5>
+    <div class="card">
+        <div class="card-body p-4">
+            <table class="table table-stripped">
+                <tr>
+                    <th>First Name</th>
+                    <td>{{jobapplication.first_name}}</td>
+                </tr>
+                <tr>
+                    <th>Last Name</th>
+                    <td>{{jobapplication.last_name}}</td>
+                </tr>
+                <tr>
+                    <th>Experiance</th>
+                    <td>{{jobapplication.experience}}</td>
+                </tr>
+                <tr>
+                    <th>Qualification</th>
+                    <td>{{jobapplication.education}}</td>
+                </tr>
+                <tr>
+                    <th>Resume</th>
+                    {% if jobapplication.resume %}
+                    <td><a href="{{jobapplication.resume.url}}" target="_blank">Download</a></td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Portfolio</th>
+                    {% if jobapplication.portfolio %}
+                    <td><a href="{{jobapplication.portfolio.url}}" target="_blank">Download</a></td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Submited date</th>
+                    <td>{{jobapplication.submitted_at}}</td>
+                </tr>
+                <tr>
+                    <th colspan="2" style="text-align: center;">
+                        <a class="btn btn-outline-danger" href="{%url 'delete_application' jobapplication.id %}" onclick="return confirm('Are you want to delete this application permanently ?')">Delete application</a>
+                    </th>
+                </tr>
+            </table>
+
+
+             
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Civil Construction Services | Land Concern's{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="relative bg-brand-navy pt-32 pb-20 overflow-hidden text-center text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-blue/30 via-transparent to-transparent opacity-60"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10 space-y-4">
+        <span class="text-brand-gold font-semibold text-xs md:text-sm uppercase tracking-[0.25em] block">
+            Specialized Offerings
+        </span>
+        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+            Civil Construction & Contracting
+        </h1>
+        <div class="flex justify-center items-center space-x-2 text-slate-355 text-xs md:text-sm font-light pt-2">
+            <a href="{% url 'Index' %}" class="hover:text-white transition-colors">Home</a>
+            <span>/</span>
+            <a href="{% url 'ServicesPage' %}" class="hover:text-white transition-colors">Services</a>
+            <span>/</span>
+            <span class="text-white opacity-70">Civil Construction</span>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Left details -->
+        <div class="lg:col-span-2 space-y-8">
+            <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100 space-y-6">
+                <h2 class="font-serif text-2xl font-bold text-brand-navy pb-4 border-b border-slate-150 flex items-center">
+                    <i class="bi bi-bricks text-brand-gold mr-3"></i>
+                    <span>Rigorous Structural Build Standards</span>
+                </h2>
+                <p class="text-slate-500 font-light text-sm sm:text-base leading-relaxed">
+                    Our structural and civil engineering teams maintain total quality control. We construct premium villas, gated layout concrete compound walls, drainage frameworks, internal community roads, and commercial complexes with precision.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                    <div class="p-5 bg-brand-lightBg rounded-xl border border-slate-100">
+                        <h4 class="font-serif font-bold text-brand-navy text-sm mb-2">Foundation Vetting</h4>
+                        <p class="text-xs text-slate-500 font-light">Site soil test checking, pile/raft foundation calculations, and water-resistance treatments.</p>
+                    </div>
+                    <div class="p-5 bg-brand-lightBg rounded-xl border border-slate-100">
+                        <h4 class="font-serif font-bold text-brand-navy text-sm mb-2">Gated Infrastructures</h4>
+                        <p class="text-xs text-slate-555 font-light">Professional grade internal black-topped tar roads, storm drainage, and street light setups.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Right side enquiry -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-md border border-slate-100 space-y-6 sticky top-28">
+                <h4 class="font-serif text-lg font-bold text-brand-navy">Request Construction Estimate</h4>
+                <p class="text-xs text-slate-500 font-light">Contact our structural contractors today.</p>
+                <form action="{% url 'Contact' %}" method="POST" class="space-y-4 pt-4 border-t border-slate-150">
+                    {% csrf_token %}
+                    <input type="hidden" name="subject" value="Inquiry for Civil Construction Service">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-500 block">Your Name</label>
+                        <input type="text" name="name" required class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-brand-blue text-slate-700">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-500 block">Phone Number</label>
+                        <input type="tel" name="phone" required class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-brand-blue text-slate-700">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold uppercase text-slate-500 block">Message Details</label>
+                        <textarea name="message" rows="3" required class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:outline-none focus:border-brand-blue text-slate-700">Please contact me regarding villa construction materials, estimation sheets, and planning.</textarea>
+                    </div>
+                    <button type="submit" class="w-full py-2.5 bg-brand-navy hover:bg-brand-blue text-white font-bold rounded-lg text-xs tracking-wider uppercase transition-colors">
+                        Book Appointment
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

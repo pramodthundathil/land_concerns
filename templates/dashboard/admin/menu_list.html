@@ -1,0 +1,66 @@
+{% extends 'dashboard/index.html' %}{% load static %}{% block admin %}
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="card-title fw-semibold">{{ page_title }}</h5>
+            <a href="{% url 'menu_create' %}" class="btn btn-primary">Create Menu</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-nowrap mb-0 align-middle">
+                <thead class="text-dark fs-4">
+                    <tr>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Name</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Code</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Position</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Status</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Actions</h6>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for menu in menus %}
+                    <tr>
+                        <td class="border-bottom-0">
+                            <h6 class="fw-semibold mb-1">{{ menu.name }}</h6>
+                        </td>
+                        <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal">{{ menu.code }}</p>
+                        </td>
+                        <td class="border-bottom-0">
+                            <span class="badge bg-secondary rounded-3 fw-semibold">{{ menu.menu_position }}</span>
+                        </td>
+                        <td class="border-bottom-0">
+                            {% if menu.status %}
+                            <span class="badge bg-success rounded-3 fw-semibold">Active</span>
+                            {% else %}
+                            <span class="badge bg-danger rounded-3 fw-semibold">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="border-bottom-0">
+                            <a href="{% url 'menu_builder' menu.pk %}" class="btn btn-primary btn-sm">Builder</a>
+                            <a href="{% url 'menu_delete' menu.pk %}" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No menus found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

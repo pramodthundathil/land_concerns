@@ -1,0 +1,70 @@
+{% load static %}
+{% load humanize %}
+<div class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-row md:flex-col h-full cursor-pointer"
+     onclick="location.href='{% url 'ProjectSingle' prop.id %}'">
+    <!-- Image block -->
+    <div class="relative overflow-hidden w-28 sm:w-40 md:w-full aspect-[4/3] bg-slate-100 shrink-0">
+        <div class="absolute top-2 left-2 sm:top-4 sm:left-4 z-10 hidden sm:flex flex-col gap-1.5">
+            <span class="px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full bg-brand-navy text-white shadow-md">
+                {{ prop.project_category }}
+            </span>
+            <span class="px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full bg-brand-green text-white shadow-md">
+                For {{ prop.purpose }}
+            </span>
+        </div>
+        <div class="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 hidden sm:block">
+        </div>
+        
+        {% if prop.primary_image %}
+            <img src="{{ prop.primary_image.url }}" alt="{{ prop.project_title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out">
+        {% else %}
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="{{ prop.project_title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out">
+        {% endif %}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </div>
+
+    <!-- Details block -->
+    <div class="p-3 sm:p-6 flex flex-col flex-grow justify-between">
+        <div>
+            <!-- Mobile-only Badges -->
+            <div class="flex flex-wrap gap-1 mb-1.5 sm:hidden">
+                <span class="px-2 py-0.5 text-[8px] font-extrabold uppercase tracking-wider rounded bg-brand-navy text-white">
+                    {{ prop.project_category }}
+                </span>
+                <span class="px-2 py-0.5 text-[8px] font-extrabold uppercase tracking-wider rounded bg-brand-green text-white">
+                    For {{ prop.purpose }}
+                </span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-slate-400 text-[10px] sm:text-xs mb-1.5 sm:mb-2">
+                <div class="flex items-center space-x-1 sm:space-x-1.5">
+                    <i class="bi bi-geo-alt-fill text-brand-gold"></i>
+                    <span>{{ prop.project_subname }}</span>
+                </div>
+                {% if prop.price %}
+                <span class="text-brand-green font-bold text-[10px] sm:text-xs bg-brand-navy/5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded mt-1 sm:mt-0 self-start sm:self-auto">
+                    {{ prop.formatted_price }}
+                </span>
+                {% endif %}
+            </div>
+            <h3 class="font-serif text-sm sm:text-base md:text-lg font-bold text-brand-navy group-hover:text-brand-blue transition-colors mb-1 sm:mb-3">
+                <a href="{% url 'ProjectSingle' prop.id %}">{{ prop.project_title }}</a>
+            </h3>
+            <p class="text-slate-500 text-xs sm:text-sm font-light line-clamp-1 sm:line-clamp-3 mb-3 sm:mb-6 hidden sm:block">
+                {{ prop.project_description|striptags|truncatewords:20 }}
+            </p>
+        </div>
+        
+        <!-- Action Row -->
+        <div class="pt-3 sm:pt-5 border-t border-slate-100 grid grid-cols-2 gap-2 sm:gap-3 mt-auto">
+            <a href="tel:+918848342321" onclick="event.stopPropagation();" class="inline-flex items-center justify-center py-2 px-3 bg-brand-lightBg hover:bg-brand-navy text-brand-navy hover:text-white rounded-lg text-xs font-semibold transition-all duration-300 shadow-sm border border-slate-150">
+                <i class="bi bi-telephone-fill mr-1.5"></i>
+                <span>Call</span>
+            </a>
+            <a href="https://wa.me/918848342321?text=Hi,%20I'm%2520interested%20in%20the%20property:%20{{ prop.project_title }}" onclick="event.stopPropagation();" target="_blank" class="inline-flex items-center justify-center py-2 px-3 bg-brand-green hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition-all duration-300 shadow-sm">
+                <i class="bi bi-whatsapp mr-1.5"></i>
+                <span>WhatsApp</span>
+            </a>
+        </div>
+    </div>
+</div>

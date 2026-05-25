@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Photo Gallery & Certifications | Land Concern's{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="relative bg-brand-navy pt-32 pb-20 overflow-hidden text-center text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-blue/30 via-transparent to-transparent opacity-60"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10 space-y-4">
+        <span class="text-brand-gold font-semibold text-xs md:text-sm uppercase tracking-[0.25em] block" data-aos="fade-down">
+            Visual Portfolios
+        </span>
+        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight" data-aos="fade-up" data-aos-delay="100">
+            Media Gallery
+        </h1>
+        <p class="text-slate-300 font-light max-w-xl mx-auto text-xs sm:text-sm" data-aos="fade-up" data-aos-delay="200">
+            Explore our site developments, structural completions, office layout certifications, and team photos.
+        </p>
+    </div>
+</div>
+
+<!-- Tabbed Gallery Section -->
+<section class="py-16 bg-white" x-data="{ activeTab: 'all' }">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Tab Navigation Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mb-12" data-aos="fade-up">
+            <button @click="activeTab = 'all'" :class="activeTab === 'all' ? 'bg-brand-navy text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'" class="px-5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-300">
+                All Photos
+            </button>
+            <button @click="activeTab = 'completed'" :class="activeTab === 'completed' ? 'bg-brand-navy text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'" class="px-5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-300">
+                Completed Projects
+            </button>
+            <button @click="activeTab = 'approvals'" :class="activeTab === 'approvals' ? 'bg-brand-navy text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'" class="px-5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-300">
+                Approvals & Certificates
+            </button>
+            <button @click="activeTab = 'facility'" :class="activeTab === 'facility' ? 'bg-brand-navy text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'" class="px-5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-300">
+                Facility Photos
+            </button>
+            <button @click="activeTab = 'team'" :class="activeTab === 'team' ? 'bg-brand-navy text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'" class="px-5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-300">
+                Team Photos
+            </button>
+            <button @click="activeTab = 'other'" :class="activeTab === 'other' ? 'bg-brand-navy text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'" class="px-5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-300">
+                Other Photos
+            </button>
+        </div>
+
+        <!-- Grid Container -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            
+            <!-- Completed Projects Photos -->
+            {% if completed_projects %}
+                {% for img in completed_projects %}
+                <div x-show="activeTab === 'all' || activeTab === 'completed'" x-transition class="group relative overflow-hidden rounded-2xl aspect-[4/3] bg-slate-100 shadow-sm">
+                    <a href="{{ img.image.url }}" class="glightbox block w-full h-full">
+                        <img src="{{ img.image.url }}" alt="Completed Project" class="w-full h-full object-cover transform group-hover:scale-108 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-4">
+                            <i class="bi bi-zoom-in text-2xl mb-1"></i>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-brand-gold">Completed Project</span>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Approvals & Certifications -->
+            {% if approvals %}
+                {% for img in approvals %}
+                <div x-show="activeTab === 'all' || activeTab === 'approvals'" x-transition class="group relative overflow-hidden rounded-2xl aspect-[4/3] bg-slate-100 shadow-sm">
+                    <a href="{{ img.image.url }}" class="glightbox block w-full h-full">
+                        <img src="{{ img.image.url }}" alt="Approvals and Certifications" class="w-full h-full object-cover transform group-hover:scale-108 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-4">
+                            <i class="bi bi-zoom-in text-2xl mb-1"></i>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-brand-gold">Approvals & Certs</span>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Facility Photos -->
+            {% if facility %}
+                {% for img in facility %}
+                <div x-show="activeTab === 'all' || activeTab === 'facility'" x-transition class="group relative overflow-hidden rounded-2xl aspect-[4/3] bg-slate-100 shadow-sm">
+                    <a href="{{ img.image.url }}" class="glightbox block w-full h-full">
+                        <img src="{{ img.image.url }}" alt="Facility" class="w-full h-full object-cover transform group-hover:scale-108 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-4">
+                            <i class="bi bi-zoom-in text-2xl mb-1"></i>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-brand-gold">Facility Photo</span>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Team Photos -->
+            {% if team %}
+                {% for img in team %}
+                <div x-show="activeTab === 'all' || activeTab === 'team'" x-transition class="group relative overflow-hidden rounded-2xl aspect-[4/3] bg-slate-100 shadow-sm">
+                    <a href="{{ img.image.url }}" class="glightbox block w-full h-full">
+                        <img src="{{ img.image.url }}" alt="Team" class="w-full h-full object-cover transform group-hover:scale-108 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-4">
+                            <i class="bi bi-zoom-in text-2xl mb-1"></i>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-brand-gold">Team Photo</span>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Other Photos -->
+            {% if other %}
+                {% for img in other %}
+                <div x-show="activeTab === 'all' || activeTab === 'other'" x-transition class="group relative overflow-hidden rounded-2xl aspect-[4/3] bg-slate-100 shadow-sm">
+                    <a href="{{ img.image.url }}" class="glightbox block w-full h-full">
+                        <img src="{{ img.image.url }}" alt="Other" class="w-full h-full object-cover transform group-hover:scale-108 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-4">
+                            <i class="bi bi-zoom-in text-2xl mb-1"></i>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-brand-gold">Other Photo</span>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+
+    </div>
+</section>
+{% endblock %}

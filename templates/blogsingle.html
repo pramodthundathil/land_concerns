@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ blog.blogtitle }} | Real Estate Insights | Land Concern's{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="relative bg-brand-navy pt-32 pb-20 overflow-hidden text-center text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-blue/30 via-transparent to-transparent opacity-60"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10 space-y-4">
+        <span class="text-brand-gold font-semibold text-xs md:text-sm uppercase tracking-[0.25em] block" data-aos="fade-down">
+            Insights & Guides
+        </span>
+        <h1 class="font-serif text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight max-w-3xl mx-auto leading-snug" data-aos="fade-up" data-aos-delay="100">
+            {{ blog.blogtitle }}
+        </h1>
+        <div class="flex justify-center items-center space-x-4 text-slate-350 text-xs md:text-sm font-light pt-2" data-aos="fade-up" data-aos-delay="150">
+            <span>Posted: {{ blog.date_added|date:"d M, Y" }}</span>
+            <span>&bull;</span>
+            <span>By: Land Concern's Team</span>
+        </div>
+    </div>
+</div>
+
+<!-- Article Detail Layout -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        
+        <!-- Left Column: Article Body -->
+        <article class="lg:col-span-2 space-y-8 bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
+            
+            {% if blog.image %}
+            <div class="rounded-xl overflow-hidden aspect-[16/9] mb-8 bg-slate-100">
+                <img src="{{ blog.image.url }}" alt="{{ blog.blogtitle }}" class="w-full h-full object-cover">
+            </div>
+            {% endif %}
+
+            <!-- Description -->
+            <p class="text-slate-650 font-semibold italic text-base border-l-4 border-brand-gold pl-4 my-6">
+                {{ blog.description }}
+            </p>
+
+            <!-- Main Content Body -->
+            <div class="prose max-w-none text-slate-705 font-light text-sm sm:text-base leading-relaxed space-y-6">
+                {{ blog.body|safe }}
+            </div>
+
+            <!-- Social Share widget -->
+            <div class="pt-8 border-t border-slate-150 flex flex-wrap items-center justify-between gap-4">
+                <span class="text-xs font-bold text-slate-450 uppercase tracking-wider">Share this article:</span>
+                <div class="flex items-center space-x-3">
+                    <a href="https://wa.me/?text=Read%20this%20article:%20{{ blog.blogtitle }}%20-%20http://{{ request.get_host }}{% url 'BlogSingle' blog.id %}" target="_blank" class="w-9 h-9 rounded-full bg-brand-lightBg hover:bg-brand-green hover:text-white text-brand-green flex items-center justify-center transition-colors">
+                        <i class="bi bi-whatsapp text-sm"></i>
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=http://{{ request.get_host }}{% url 'BlogSingle' blog.id %}" target="_blank" class="w-9 h-9 rounded-full bg-brand-lightBg hover:bg-brand-blue hover:text-white text-brand-blue flex items-center justify-center transition-colors">
+                        <i class="bi bi-facebook text-sm"></i>
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?url=http://{{ request.get_host }}{% url 'BlogSingle' blog.id %}&text={{ blog.blogtitle }}" target="_blank" class="w-9 h-9 rounded-full bg-brand-lightBg hover:bg-blue-400 hover:text-white text-blue-500 flex items-center justify-center transition-colors">
+                        <i class="bi bi-twitter text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+        </article>
+
+        <!-- Right Column: Sidebar -->
+        <aside class="lg:col-span-1 space-y-8">
+            <div class="sticky top-28 space-y-6">
+                
+                <!-- Recent Publications Widget -->
+                {% if recent %}
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                    <h4 class="font-serif text-base font-bold text-brand-navy mb-5 pb-3 border-b border-slate-150">
+                        Recent Publications
+                    </h4>
+                    
+                    <div class="space-y-4">
+                        {% for post in recent %}
+                        <div class="flex items-start space-x-3.5 group">
+                            <!-- Mini image -->
+                            <div class="w-16 h-12 rounded-lg bg-slate-150 overflow-hidden shrink-0 relative">
+                                {% if post.image %}
+                                    <img src="{{ post.image.url }}" alt="{{ post.blogtitle }}" class="w-full h-full object-cover">
+                                {% else %}
+                                    <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=150&q=80" alt="{{ post.blogtitle }}" class="w-full h-full object-cover">
+                                {% endif %}
+                            </div>
+                            <!-- Meta -->
+                            <div>
+                                <h5 class="font-bold text-xs text-brand-navy line-clamp-2 leading-tight group-hover:text-brand-blue transition-colors">
+                                    <a href="{% url 'BlogSingle' post.id %}">{{ post.blogtitle }}</a>
+                                </h5>
+                                <span class="text-[10px] text-slate-400 font-light block mt-1">{{ post.date_added|date:"d M, Y" }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Contact CTA Widget -->
+                <div class="glass-card bg-white rounded-2xl shadow-sm border border-slate-100 p-6 text-center space-y-4">
+                    <h4 class="font-serif text-base font-bold text-brand-navy">Looking to buy Property?</h4>
+                    <p class="text-xs text-slate-500 font-light leading-relaxed">
+                        Consult our legal property advisors today for dispute-free land deals.
+                    </p>
+                    <a href="{% url 'Contact' %}" class="w-full py-2.5 bg-brand-gold hover:bg-brand-goldDark text-brand-navy font-bold rounded-lg text-xs tracking-wider uppercase transition-colors shadow-sm block">
+                        Get In Touch
+                    </a>
+                </div>
+
+            </div>
+        </aside>
+
+    </div>
+</div>
+{% endblock %}

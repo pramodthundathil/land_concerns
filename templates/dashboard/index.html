@@ -1,0 +1,428 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'asset/images/logos/logo_lc.png' %}" />
+  <link rel="stylesheet" href="{% static 'asset/css/styles.min.css' %}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google Tag Manager -->
+
+
+</head>
+
+<body>
+
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar">
+      <!-- Sidebar scroll-->
+      <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+          <a href="{%url 'Adminstration' %}" class="text-nowrap logo-img">
+            <img src="{% static 'asset/images/logos/logo_lc.png' %}" width="160" alt="Land Concern's Logo" style="max-height: 50px; object-fit: contain;" />
+          </a>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <i class="ti ti-x fs-8"></i>
+          </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+          <ul id="sidebarnav">
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">Home</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'Adminstration' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">UI COMPONENTS</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'HomePageEdits' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Home Carousels</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'menu_list' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-menu"></i>
+                </span>
+                <span class="hide-menu">Menu</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'page_list' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-file"></i>
+                </span>
+                <span class="hide-menu">Pages</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'ProjectsEdits' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-alert-circle"></i>
+                </span>
+                <span class="hide-menu">Properties</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'service_list' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-briefcase"></i>
+                </span>
+                <span class="hide-menu">Services</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'GalleryEdits' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-cards"></i>
+                </span>
+                <span class="hide-menu">Gallery</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'JobsEdits' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-file-description"></i>
+                </span>
+                <span class="hide-menu">Jobs</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'BlogeEdits' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-typography"></i>
+                </span>
+                <span class="hide-menu">Blogs</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'TestimonialAdmin' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-file-description"></i>
+                </span>
+                <span class="hide-menu">Testimonial</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'Enquiry' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Enquiry</span>
+              </a>
+            </li>
+
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
+    </aside>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+      <!--  Header Start -->
+      <header class="app-header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <ul class="navbar-nav">
+            <li class="nav-item d-block d-xl-none">
+              <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                <i class="ti ti-menu-2"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
+                <i class="ti ti-bell-ringing"></i>
+                <div class="notification bg-primary rounded-circle"></div>
+              </a>
+            </li>
+          </ul>
+          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+              <li class="nav-item dropdown">
+                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <img src="{% static 'asset/images/profile/user-1.jpg' %}" alt="" width="35" height="35"
+                    class="rounded-circle">
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                  <div class="message-body">
+
+                    <a href="{%url 'SignOut' %}" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!--  Header End -->
+      <div class="container-fluid">
+        <!--  Row 1 -->
+        {% block admin %}
+        <div class="row">
+          <!-- Properties Count -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-bottom border-primary border-3 shadow-sm h-100">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="fw-bold text-primary mb-1">Properties</h5>
+                    <h2 class="mb-0 fw-bold">{{ projects_count }}</h2>
+                  </div>
+                  <div class="bg-primary-subtle text-primary p-3 rounded-circle">
+                    <i class="ti ti-alert-circle fs-6"></i>
+                  </div>
+                </div>
+                <p class="mb-0 mt-3 text-muted small">Total Active Properties</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Services Count -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-bottom border-success border-3 shadow-sm h-100">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="fw-bold text-success mb-1">Services</h5>
+                    <h2 class="mb-0 fw-bold">{{ services_count }}</h2>
+                  </div>
+                  <div class="bg-success-subtle text-success p-3 rounded-circle">
+                    <i class="ti ti-briefcase fs-6"></i>
+                  </div>
+                </div>
+                <p class="mb-0 mt-3 text-muted small">Services Offered</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enquiries Count -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-bottom border-warning border-3 shadow-sm h-100">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="fw-bold text-warning mb-1">Enquiries</h5>
+                    <h2 class="mb-0 fw-bold">{{ enquiries_count }}</h2>
+                  </div>
+                  <div class="bg-warning-subtle text-warning p-3 rounded-circle">
+                    <i class="ti ti-article fs-6"></i>
+                  </div>
+                </div>
+                 <p class="mb-0 mt-3 text-muted small">Total Web Enquiries</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Job Applications -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-bottom border-info border-3 shadow-sm h-100">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="fw-bold text-info mb-1">Job Applications</h5>
+                    <h2 class="mb-0 fw-bold">{{ job_applications_count }}</h2>
+                  </div>
+                  <div class="bg-info-subtle text-info p-3 rounded-circle">
+                     <i class="ti ti-file-description fs-6"></i>
+                  </div>
+                </div>
+                <p class="mb-0 mt-3 text-muted small">Candidates Applied</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blogs Count -->
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-bottom border-danger border-3 shadow-sm h-100">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="fw-bold text-danger mb-1">Blogs</h5>
+                    <h2 class="mb-0 fw-bold">{{ blogs_count }}</h2>
+                  </div>
+                  <div class="bg-danger-subtle text-danger p-3 rounded-circle">
+                    <i class="ti ti-typography fs-6"></i>
+                  </div>
+                </div>
+                 <p class="mb-0 mt-3 text-muted small">Published Articles</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gallery Count -->
+           <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-bottom border-dark border-3 shadow-sm h-100">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="fw-bold text-dark mb-1">Gallery</h5>
+                    <h2 class="mb-0 fw-bold">{{ gallery_count }}</h2>
+                  </div>
+                  <div class="bg-secondary-subtle text-dark p-3 rounded-circle">
+                    <i class="ti ti-photo fs-6"></i>
+                  </div>
+                </div>
+                 <p class="mb-0 mt-3 text-muted small">Images in Gallery</p>
+              </div>
+            </div>
+          </div>
+          
+           <!-- Visitors Count -->
+           <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-bottom border-primary border-3 shadow-sm h-100">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="fw-bold text-primary mb-1">Today's Visitors</h5>
+                    <h2 class="mb-0 fw-bold">{{ today_visitors }}</h2>
+                  </div>
+                  <div class="bg-primary-subtle text-primary p-3 rounded-circle">
+                    <i class="ti ti-users fs-6"></i>
+                  </div>
+                </div>
+                 <p class="mb-0 mt-3 text-muted small">Unique Visitors Today</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Visitor Analytics Chart -->
+        <div class="row">
+          <div class="col-lg-12 d-flex align-items-stretch">
+            <div class="card w-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                  <div class="mb-3 mb-sm-0">
+                    <h5 class="card-title fw-semibold">Website Traffic</h5>
+                    <p class="card-subtitle mb-0">Unique visitors over the last 7 days</p>
+                  </div>
+                </div>
+                <div id="visitorChart"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script src="{% static 'asset/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
+        <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            var options = {
+              series: [{
+                name: "Visitors",
+                data: {{ visitor_counts|safe }}
+              }],
+              chart: {
+                type: 'area',
+                height: 350,
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                foreColor: '#adb0bb',
+                toolbar: {
+                  show: false
+                }
+              },
+              colors: ["#5D87FF"],
+              stroke: {
+                curve: 'smooth',
+                width: 2
+              },
+              fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.9,
+                    stops: [0, 90, 100]
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              xaxis: {
+                categories: {{ visitor_dates|safe }},
+                labels: {
+                    style: {
+                        colors: '#adb0bb'
+                    }
+                }
+              },
+              tooltip: {
+                theme: 'light'
+              }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#visitorChart"), options);
+            chart.render();
+          });
+        </script>
+        {% endblock %}
+
+        <div class="py-6 px-6 text-center">
+          <p class="mb-0 fs-4">Design and Developed by <a href="https://www.byteboot.in/" target="_blank"
+              class="pe-1 text-primary text-decoration-underline">Byteboot</a> 
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-TZPMSHVN');</script>
+  <!-- End Google Tag Manager -->
+
+  <script src="{% static 'asset/libs/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'asset/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'asset/js/sidebarmenu.js' %}"></script>
+  <script src="{% static 'asset/js/app.min.js' %}"></script>
+  <script src="{% static 'asset/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
+  <script src="{% static 'asset/libs/simplebar/dist/simplebar.js' %}"></script>
+  <script src="{% static 'asset/js/dashboard.js' %}"></script>
+  {% block scripts %}{% endblock %}
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  {% if messages %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      {% for message in messages %}
+        Swal.fire({
+          position: "top-end",
+          icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% elif message.tags == 'info' %}info{% else %}success{% endif %}",
+          title: "{{ message }}",
+          showConfirmButton: false,
+          timer: 3000,
+          toast: true
+        });
+      {% endfor %}
+    });
+  </script>
+  {% endif %}
+</body>
+
+</html>

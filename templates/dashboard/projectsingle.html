@@ -1,0 +1,181 @@
+{% extends 'dashboard/index.html' %}
+{% load static %}
+{% block admin %}
+<style>
+    .imagegallery {
+        display: flex;
+        justify-content: baseline;
+        flex-wrap: wrap;
+        align-items: baseline;
+    }
+
+    .imagegallery .image-items {
+        margin: 10px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title fw-semibold mb-4">Update Project</h5>
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <strong>Info:</strong> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-4">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table class="table table-striped">
+                    <tr>
+                        <th>Project Title</th>
+                        <td><input type="text" class="form-control" name="project_title" required
+                                value="{{ project.project_title }}"></td>
+                    </tr>
+                    <tr>
+                        <th>Project Subname</th>
+                        <td><input type="text" class="form-control" name="project_subname" required
+                                value="{{ project.project_subname }}"></td>
+                    </tr>
+                    <tr>
+                        <th>Project Description</th>
+                        <td><textarea class="form-control"
+                                name="project_description">{{ project.project_description }}</textarea></td>
+                    </tr>
+
+                    <tr>
+                        <th>Primary Image</th>
+                        <td>
+                            <input type="file" class="form-control" name="primary_image">
+                            {% if project.primary_image %}
+                            <img src="{{ project.primary_image.url }}" class="img-thumbnail mt-2" alt="Primary Image"
+                                style="width: 100px;">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Plan Image 1</th>
+                        <td>
+                            <input type="file" class="form-control" name="plan_image_1">
+                            {% if project.plan_image_1 %}
+                            <img src="{{ project.plan_image_1.url }}" class="img-thumbnail mt-2" alt="Plan Image 1"
+                                style="width: 100px;">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Plan Image 2</th>
+                        <td>
+                            <input type="file" class="form-control" name="plan_image_2">
+                            {% if project.plan_image_2 %}
+                            <img src="{{ project.plan_image_2.url }}" class="img-thumbnail mt-2" alt="Plan Image 2"
+                                style="width: 100px;">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Project Category</th>
+                        <td>
+                            <select class="form-select" name="project_category">
+                                <option value="Apartments" {% if project.project_category=='Apartments' %}selected{%
+                                    endif %}>Apartments</option>
+                                <option value="Residence" {% if project.project_category=='Residence' %}selected{% endif
+                                    %}>Residence</option>
+                                <option value="Commercial" {% if project.project_category=='Commercial' %}selected{%
+                                    endif %}>Commercial</option>
+                                <option value="Office" {% if project.project_category=='Office' %}selected{% endif %}>
+                                    Office</option>
+                                <option value="Renovation" {% if project.project_category=='Renovation' %}selected{%
+                                    endif %}>Renovation</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Project Status</th>
+                        <td>
+                            <select class="form-select" name="project_status">
+                                <option value="On Going" {% if project.project_status=='On Going' %}selected{% endif %}>
+                                    On Going</option>
+                                <option value="Completed" {% if project.project_status=='Completed' %}selected{% endif
+                                    %}>Completed</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Is Featured Product?</th>
+                        <td>
+                            <input type="checkbox" name="is_featured_product" {% if project.is_featured_product
+                                %}checked{% endif %}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Order</th>
+                        <td>
+                            <input type="number" class="form-control" name="order" value="{{ project.order }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-info">Update</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <h5 class="card-title fw-semibold mb-4">Add Photos on this Project</h5>
+    <div class="card">
+        <div class="card-body p-4">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Photos</button>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Add Picture</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{%url 'AddPicturesToProject' project.id %}" method="post"
+                                enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <label for="">Caption</label>
+                                <input type="text" name="caption" class="form-control" required placeholder="Caption">
+                                <label for="">Image</label>
+                                <input type="file" name="image" class="form-control" required placeholder="image">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="imagegallery mt-5">
+                {% for item in project.gallery_images.all %}
+                <div class="image-items">
+                    {% if item.file_path %}
+                    <img src="{{item.file_path.url}}" width="200px" alt="">
+                    {% endif %}
+                    <h6 class="text-primary mt-3">{{item.title}}</h6>
+                    <a href="{%url 'PhotodeleteFromProject' project.id item.id %}"
+                        onclick="return confirm('Are you want to delete this Image from Project ?')" class="text-danger"
+                        style="font-size: 20px !important;">
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

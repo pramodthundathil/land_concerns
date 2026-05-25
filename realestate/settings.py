@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'change-me')
 DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = [host.strip() for host in config('ALLOWED_HOSTS', default='landconcerns.in,www.landconcerns.in,localhost,127.0.0.1').split(',')]
+ALLOWED_HOSTS = [host.strip() for host in config('ALLOWED_HOSTS', default='landconcerns.in,www.landconcerns.in,localhost,127.0.0.1,landconcerns.byteboot.in').split(',')]
 CKEDITOR_UPLOAD_PATH = 'content/ckeditor/'
 CKEDITOR_5_CONFIGS = {
     'default': {

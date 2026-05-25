@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'change-me')
-DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 't')
+DEBUG = config('DEBUG', default=True, cast=bool)
 # ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'landconcerns.in,www.landconcerns.in,localhost,127.0.0.1').split(',')
 ALLOWED_HOSTS = ["*"]
 CKEDITOR_UPLOAD_PATH = 'content/ckeditor/'

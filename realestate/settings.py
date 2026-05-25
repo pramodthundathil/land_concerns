@@ -188,11 +188,11 @@ LOGIN_URL = '/SignIn/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'real_estate_web'),
-        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '1234'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
-        'PORT': int(os.environ.get('POSTGRES_PORT', 5432)),
+        'NAME': config('POSTGRES_DB', default='real_estate_web'),
+        'USER': config('POSTGRES_USER', default='postgres'),
+        'PASSWORD': config('POSTGRES_PASSWORD', default='1234'),
+        'HOST': config('POSTGRES_HOST', default='localhost'),
+        'PORT': config('POSTGRES_PORT', default=5432, cast=int),
     }
 }
 

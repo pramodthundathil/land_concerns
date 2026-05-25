@@ -14,6 +14,10 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 import os
 from decouple import config
+from whitenoise.storage import CompressedManifestStaticFilesStorage
+
+class ForgivingManifestStaticFilesStorage(CompressedManifestStaticFilesStorage):
+    manifest_strict = False
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -271,7 +275,7 @@ if AWS_STORAGE_BUCKET_NAME:
             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         },
         "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+            "BACKEND": "realestate.settings.ForgivingManifestStaticFilesStorage",
         },
     }
 else:
@@ -281,7 +285,7 @@ else:
             "BACKEND": "django.core.files.storage.FileSystemStorage",
         },
         "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+            "BACKEND": "realestate.settings.ForgivingManifestStaticFilesStorage",
         },
     }
 # Email Configuration

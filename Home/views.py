@@ -146,7 +146,7 @@ def Contact(request):
         except Exception:
             pass
 
-        messages.info(request,"Enquiry Sent to Covenant House... ")
+        messages.info(request,"Enquiry Sent to Land Concerns... ")
         return redirect("Contact")
     return render(request,"contact.html")
 

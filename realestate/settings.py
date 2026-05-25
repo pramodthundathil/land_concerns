@@ -19,6 +19,12 @@ from whitenoise.storage import CompressedManifestStaticFilesStorage
 class ForgivingManifestStaticFilesStorage(CompressedManifestStaticFilesStorage):
     manifest_strict = False
 
+    def hashed_name(self, name, content=None, filename=None):
+        try:
+            return super().hashed_name(name, content, filename)
+        except ValueError:
+            return name
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

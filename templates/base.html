@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Land Concern's | Luxury Real Estate & Land Developers in Kerala{% endblock %}</title>
+    <title>{% block title %}Land Concern's RealEstate People |  Real Estate & Land Developers in Kochi, Kerala{% endblock %}</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{% block meta_description %}Premium land deals, luxury villas, commercial spaces, and residential plots in Kochi and across Kerala. Trusted real estate experts with over 30 years of trust.{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}real estate Kerala, land sale Kochi, villas in Kochi, flats in Kochi, plots Aluva, commercial spaces Kerala, property developers, Land Concerns{% endblock %}">
+    <meta name="description" content="{% block meta_description %}Discover premium residential plots, luxury villas, commercial land layouts, and retail spaces in Kochi city area (Edappally, Kakkanad, Kaloor, Palarivattom, Aluva). Legally verified clear titles with over 30 years of trust from Land Concern's RealEstate People.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}real estate Kochi, land concerns Kochi, realestate people Kochi, plots for sale Edappally, properties Kakkanad, villas Palarivattom, commercial spaces Kaloor, land developers Kochi city, apartments Kochi, buy land Kerala, clear title plots Kochi{% endblock %}">
     
     <!-- OpenGraph Meta Tags -->
-    <meta property="og:title" content="{% block og_title %}Land Concern's | Premium Real Estate & Land Developers{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Discover premium plots, luxury villas, and high-yield commercial spaces across Kochi and Kerala.{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Land Concern's RealEstate People | Premium Real Estate & Land Developers in Kochi{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Discover premium plots, luxury villas, and high-yield commercial spaces across Kakkanad, Edappally, Kaloor, Palarivattom, and Kochi city.{% endblock %}">
     <meta property="og:image" content="{% block og_image %}{% static 'asset/images/logos/logo_lc.png' %}{% endblock %}">
     <meta property="og:type" content="website">
     
@@ -127,7 +127,7 @@
                             Land <span class="text-brand-green">Concern's</span>
                         </span>
                         <span class="text-[9px] uppercase tracking-[0.25em] text-white opacity-85">
-                            Land Dealers & Developers
+                            RealEstate People
                         </span>
                     </div>
                 </a>
@@ -135,6 +135,8 @@
                 <!-- Desktop Navigation Menu -->
                 <nav class="hidden md:flex items-center space-x-8">
                     {% if header_menu_items %}
+                        <a href="{% url 'Index' %}" class="text-white hover:text-brand-gold font-medium text-sm">Home</a>
+
                         {% for item in header_menu_items %}
                             {% if item.has_children %}
                                 <!-- Dropdown Menu Item -->
@@ -268,7 +270,7 @@
                                 Land <span class="text-brand-green">Concern's</span>
                             </span>
                             <span class="text-[8px] uppercase tracking-[0.25em] text-white opacity-85">
-                                Land Dealers & Developers
+                                RealEstate People
                             </span>
                         </div>
                     </a>

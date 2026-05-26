@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ project.project_title }} | Land Concern's{% endblock %}
+{% block title %}{{ project.project_title }} in {{ project.project_subname }}, Kochi | Land Concern's RealEstate People{% endblock %}
+
+{% block meta_description %}{{ project.project_title }} located in {{ project.project_subname }}, Kochi. View features, images, pricing details, and contact advisors at Land Concern's RealEstate People.{% endblock %}
+
+{% block meta_keywords %}{{ project.project_title }} Kochi, buy property {{ project.project_subname }}, real estate Kochi city area, land concerns {{ project.project_title }}{% endblock %}
 
 {% block content %}
 <!-- Property Hero Banner -->
@@ -198,13 +202,13 @@
                     </p>
                     
                     <div class="space-y-4 mb-8">
-                        <a href="tel:+918848342321" class="flex items-center space-x-3.5 p-3 rounded-xl bg-brand-navy hover:bg-brand-blue text-white transition-colors">
+                        <a href="tel:+919388176595" class="flex items-center space-x-3.5 p-3 rounded-xl bg-brand-navy hover:bg-brand-blue text-white transition-colors">
                             <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-brand-gold shrink-0">
                                 <i class="bi bi-telephone-fill"></i>
                             </div>
                             <div>
                                 <span class="text-[10px] text-slate-300 block uppercase tracking-wider font-light">Call Advisor</span>
-                                <span class="font-bold text-sm">+91 8848 342 321</span>
+                                <span class="font-bold text-sm">+91 9388176595</span>
                             </div>
                         </a>
                         

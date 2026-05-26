@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
+from django.db.models import Q, F, Case, When, Value, IntegerField
 from PIL import Image
 from django.utils import timezone
 from django.core.mail import send_mail
@@ -19,8 +19,20 @@ from django.conf import settings
 def Index(request):
     video = VideoSlide.objects.all().order_by('-id')[:2]
     pictures = PictureSlids.objects.all()[:4]
-    projects = Projects.objects.all().order_by('order', '-created_at', '-id')[:4]
-    services = Services.objects.all().order_by('order', '-created_at', '-id')[:6]
+    projects = Projects.objects.annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('-is_featured_product', 'sort_order', '-id')[:6]
+    services = Services.objects.annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('sort_order', '-id')[:6]
     blogs = Blog.objects.all().order_by('-id')[:2]
 
     if request.method == 'POST' and 'fname' in request.POST:
@@ -243,7 +255,13 @@ def service_detail(request, slug):
 
 
 def Projects_(request):
-    projects = Projects.objects.all().order_by('order', '-created_at', '-id')
+    projects = Projects.objects.annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('sort_order', '-id')
     
     q = request.GET.get('q')
     category = request.GET.get('category')
@@ -299,7 +317,13 @@ def Projects_(request):
 
 
 def ServicesPage(request):
-    services = Services.objects.all().order_by('order', '-created_at', '-id')
+    services = Services.objects.annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('sort_order', '-id')
     context = {
         'services': services
     }
@@ -308,7 +332,13 @@ def ServicesPage(request):
 
 def Projects_Apartments(request):
     title = "Apartments"
-    projects_list = Projects.objects.filter(project_category="Apartments").order_by("order", "-id")
+    projects_list = Projects.objects.filter(project_category="Apartments").annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('sort_order', '-id')
     paginator = Paginator(projects_list, 6)
     page_number = request.GET.get('page')
     try:
@@ -327,7 +357,13 @@ def Projects_Apartments(request):
 
 def Projects_House(request):
     title = "House"
-    projects_list = Projects.objects.filter(project_category="House").order_by("order", "-id")
+    projects_list = Projects.objects.filter(project_category="House").annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('sort_order', '-id')
     paginator = Paginator(projects_list, 6)
     page_number = request.GET.get('page')
     try:
@@ -346,7 +382,13 @@ def Projects_House(request):
 
 def Projects_Commercial(request):
     title = "Commercial"
-    projects_list = Projects.objects.filter(project_category="Commercial").order_by("order", "-id")
+    projects_list = Projects.objects.filter(project_category="Commercial").annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('sort_order', '-id')
     paginator = Paginator(projects_list, 6)
     page_number = request.GET.get('page')
     try:
@@ -365,7 +407,13 @@ def Projects_Commercial(request):
 
 def Projects_Office(request):
     title = "Office"
-    projects_list = Projects.objects.filter(project_category="Office Spaces").order_by("order", "-id")
+    projects_list = Projects.objects.filter(project_category="Office Spaces").annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('sort_order', '-id')
     paginator = Paginator(projects_list, 6)
     page_number = request.GET.get('page')
     try:
@@ -384,7 +432,13 @@ def Projects_Office(request):
 
 def Projects_Renovation(request):
     title = "Renovation"
-    projects_list = Projects.objects.filter(project_category="Renovation").order_by("order", "-id")
+    projects_list = Projects.objects.filter(project_category="Renovation").annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('sort_order', '-id')
     paginator = Paginator(projects_list, 6)
     page_number = request.GET.get('page')
     try:
@@ -808,7 +862,13 @@ def delete_application(request,pk):
 # --------------------------------------------------------------------------------------
 
 def ProjectsEdits(request):
-    projects_list = Projects.objects.all().order_by('order', '-created_at', '-id')
+    projects_list = Projects.objects.annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('sort_order', '-id')
 
     q = request.GET.get('q', '')
     category = request.GET.get('category', '')
@@ -1665,7 +1725,13 @@ def project_edit(request, pk):
 # --------------------------------------------------------------------------------------
 
 def service_list(request):
-    services = Services.objects.all().order_by('order', '-created_at')
+    services = Services.objects.annotate(
+        sort_order=Case(
+            When(order__gt=0, then=F('order')),
+            default=Value(999999),
+            output_field=IntegerField(),
+        )
+    ).order_by('sort_order', '-id')
     context = {
         'services': services,
         'page_title': 'Service Management'

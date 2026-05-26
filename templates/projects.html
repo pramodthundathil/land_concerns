@@ -3,7 +3,15 @@
 {% load humanize %}
 
 {% block title %}
-    {% if title %}{{ title }} Properties | Land Concern's{% else %}Premium Properties & Plots For Sale | Land Concern's{% endif %}
+    {% if title %}{{ title }} Properties for Sale in Kochi | Land Concern's RealEstate People{% else %}Premium Properties & Plots for Sale in Kochi, Kakkanad, Edappally | Land Concern's RealEstate People{% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if title %}Browse premium {{ title }} properties in Kochi city, including Kakkanad, Edappally, Kaloor, and Palarivattom. Find verified residential layouts, flats, and villas from Land Concern's.{% else %}Find premium verified land plots, luxury villas, houses, apartments, and retail shops for sale in Kakkanad, Edappally, Palarivattom, and Kaloor, Kochi. Verified clear titles with Land Concern's.{% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% if title %}buy {{ title }} Kochi, {{ title }} Kakkanad, {{ title }} Edappally, land concerns listings{% else %}real estate Kochi, plots for sale Edappally, properties Kakkanad, land sale Palarivattom, shops Kaloor, buy plot Kochi city, luxury villas Kochi, land concerns properties{% endif %}
 {% endblock %}
 
 {% block content %}

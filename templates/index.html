@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Land Concern's | Luxury Real Estate & Land Developers{% endblock %}
+{% block title %}Land Concern's RealEstate People | Premium Real Estate & Land Developers in Kochi, Kerala{% endblock %}
+
+{% block meta_description %}Buy & sell premium residential plots, luxury villas, commercial land layouts, and retail spaces in Kochi, Edappally, Kakkanad, Kaloor, and Palarivattom. Land Concern's is Kerala's trusted real estate people with 30+ years of legal title clearance expertise.{% endblock %}
+
+{% block meta_keywords %}real estate Kochi, land concerns Kochi, realestate people Kochi, plots for sale Edappally, properties Kakkanad, villas Palarivattom, commercial spaces Kaloor, land developers Kochi city, buy land Kerala, clear title plots Kochi{% endblock %}
 
 {% block content %}
 <!-- Hero Section with Swiper Slider -->
@@ -275,6 +279,15 @@
                 <p class="text-center text-slate-500 col-span-3 py-12">No featured property deals available at the moment.</p>
             {% endif %}
         </div>
+
+        {% if projects %}
+        <div class="flex justify-center mt-12" data-aos="fade-up">
+            <a href="{% url 'Projects_' %}" class="inline-flex items-center justify-center px-8 py-3 text-sm font-semibold uppercase tracking-wider text-white bg-brand-navy hover:bg-brand-blue rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                <span>View All Properties</span>
+                <i class="bi bi-arrow-right ml-2"></i>
+            </a>
+        </div>
+        {% endif %}
     </div>
 </section>
 

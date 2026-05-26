@@ -1,18 +1,23 @@
 {% extends 'dashboard/index.html' %}{% load static %}{% block admin %}
+<style>
+    body, html, .body-wrapper, .page-wrapper {
+        overflow-x: hidden !important;
+    }
+</style>
 
 <div class="card">
-    <div class="card-body">
+    <div class="card-body p-2 p-sm-3 p-md-4">
 
         <div class="gallery-container">
-            <div class="page-header">
-                <h1>{{ action }} Property</h1>
-                <a href="{% url 'ProjectsEdits' %}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Back to List
+            <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+                <h1 class="h3 mb-0">{{ action }} Property</h1>
+                <a href="{% url 'ProjectsEdits' %}" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i> Back to List
                 </a>
             </div>
 
-            <div class="form-container"
-                style="background:white;padding:30px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <div class="form-container p-3 p-sm-4 p-md-5"
+                style="background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
@@ -81,7 +86,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-group mb-3" style="margin-top: 30px;">
+                            <div class="form-group mb-3 mt-0 mt-md-4 pt-md-1">
                                 <div class="form-check">
                                     {{ form.is_featured_product }}
                                     <label class="form-check-label" for="id_is_featured_product">
@@ -119,10 +124,10 @@
                     <!-- Primary Image Section -->
                     <div class="row mb-4">
                         <div class="col-md-12">
-                            <div class="card border border-slate-100 shadow-none bg-slate-50/50 rounded-xl p-4">
+                            <div class="card border border-slate-100 shadow-none bg-slate-50/50 rounded-xl p-3 p-md-4">
                                 <h4 class="font-serif text-base font-bold text-brand-navy mb-3">Primary Image</h4>
                                 <div class="row align-items-center">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 mb-3 mb-md-0">
                                         <div id="pageMediaPreview" class="border rounded bg-white p-2 d-flex align-items-center justify-content-center" style="height: 120px; overflow: hidden;">
                                             {% if project.primary_image %}
                                             <img src="{{ project.primary_image.url }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
@@ -136,7 +141,7 @@
                                         {{ form.primary_image }}
                                         <span class="text-muted small d-block mt-2">Or choose from Media Library:</span>
                                         {{ form.media_lib }}
-                                        <div class="mt-2">
+                                        <div class="d-flex flex-wrap gap-2 mt-2">
                                             <button type="button" class="btn btn-sm btn-outline-primary" onclick="openMediaLibrary('image')">
                                                 <i class="fas fa-image"></i> Select from Media Library
                                             </button>
@@ -228,27 +233,33 @@
                     <!-- Amenities & Specifications Section -->
                     <div class="row mb-4">
                         <div class="col-md-12">
-                            <div class="card border border-slate-100 shadow-none bg-slate-50/50 rounded-xl p-4">
+                            <div class="card border border-slate-100 shadow-none bg-slate-50/50 rounded-xl p-3 p-md-4">
                                 <h4 class="font-serif text-base font-bold text-brand-navy mb-3">Property Specifications & Amenities</h4>
                                 <p class="text-muted small mb-3">Add key features, specifications, nearby locations, or amenities (e.g., Square Feet: 2500, Swimming Pool: Yes, Road Access: 8 meters, Land Area: 10 Cents, Nearby: Kochi Metro 1km).</p>
                                 
                                 <div id="amenitiesContainer" class="space-y-2 mb-3">
                                     {% for amenity in project.amenities.all %}
-                                    <div class="row g-2 align-items-center amenity-row mt-2">
-                                        <div class="col-md-5">
-                                            <input type="text" name="amenity_name[]" class="form-control" value="{{ amenity.name }}" placeholder="Amenity/Feature Name (e.g. Square Feet)" required>
+                                    <div class="row g-2 align-items-center amenity-row mt-2 pb-2 pb-md-0 border-bottom border-light-subtle">
+                                        <div class="col-10 col-md-10">
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-6">
+                                                    <input type="text" name="amenity_name[]" class="form-control" value="{{ amenity.name }}" placeholder="Name (e.g. Area)" required>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <input type="text" name="amenity_value[]" class="form-control" value="{{ amenity.value }}" placeholder="Value" required>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-md-5">
-                                            <input type="text" name="amenity_value[]" class="form-control" value="{{ amenity.value }}" placeholder="Value (e.g. 2400 sqft)" required>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button type="button" class="btn btn-outline-danger w-100 remove-amenity-btn" onclick="removeAmenityRow(this)">Remove</button>
+                                        <div class="col-2 col-md-2 d-flex align-items-center justify-content-center">
+                                            <button type="button" class="btn btn-outline-danger w-100 px-0 remove-amenity-btn" onclick="removeAmenityRow(this)">
+                                                <i class="bi bi-trash"></i> <span class="d-none d-md-inline">Remove</span>
+                                            </button>
                                         </div>
                                     </div>
                                     {% endfor %}
                                 </div>
                                 
-                                <div class="d-flex gap-2">
+                                <div class="d-flex flex-wrap gap-2">
                                     <button type="button" class="btn btn-sm btn-outline-primary" id="addAmenityBtn">
                                         <i class="fas fa-plus"></i> Add Custom Amenity
                                     </button>
@@ -258,15 +269,15 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
 
-                    <div class="form-actions"
-                        style="margin-top:30px;padding-top:20px;border-top:1px solid var(--gray-200);">
-                        <button type="submit" class="btn btn-primary" style="min-width:120px;">
-                            <i class="fas fa-save"></i> {{ action }}
+                    <div class="form-actions d-flex flex-column flex-sm-row gap-2 mt-4 pt-3 border-top">
+                        <button type="submit" class="btn btn-primary px-4 py-2">
+                            <i class="fas fa-save me-1"></i> {{ action }}
                         </button>
-                        <a href="{% url 'ProjectsEdits' %}" class="btn btn-secondary" style="min-width:120px;">
-                            <i class="fas fa-times"></i> Cancel
+                        <a href="{% url 'ProjectsEdits' %}" class="btn btn-secondary px-4 py-2 text-center">
+                            <i class="fas fa-times me-1"></i> Cancel
                         </a>
                     </div>
                 </form>
@@ -398,6 +409,50 @@
                 display: flex;
                 justify-content: flex-end;
                 gap: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .modal-content {
+                    margin: 15px auto;
+                    width: 95%;
+                    max-height: calc(100vh - 30px);
+                    display: flex;
+                    flex-direction: column;
+                }
+                .modal-header {
+                    padding: 10px 15px;
+                }
+                .modal-header h2 {
+                    font-size: 1.25rem;
+                }
+                .modal-body {
+                    padding: 10px;
+                    overflow-y: auto;
+                    flex-grow: 1;
+                }
+                .modal-footer {
+                    padding: 10px 15px;
+                    flex-wrap: wrap;
+                    justify-content: flex-end;
+                }
+                .media-tabs {
+                    padding: 0 10px !important;
+                }
+                .media-tab {
+                    padding: 8px 12px !important;
+                    font-size: 0.9rem;
+                }
+                .media-tab-content {
+                    padding: 10px !important;
+                }
+                .media-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+                    gap: 10px !important;
+                    max-height: 40vh !important;
+                }
+                .upload-area {
+                    padding: 20px 10px !important;
+                }
             }
 
             .close-modal {
@@ -689,6 +744,94 @@
             // Initialization
             document.addEventListener('DOMContentLoaded', function () {
                 // Django template handles current images grid, no need to run initGalleryList
+
+                // Primary Image Auto-upload
+                const primaryImageInput = document.getElementById('id_primary_image');
+                if (primaryImageInput) {
+                    primaryImageInput.addEventListener('change', function(e) {
+                        const file = this.files[0];
+                        if (!file) return;
+                        
+                        if (confirm('Do you want to upload this file as the primary image immediately? (This will add it to the Media Library)')) {
+                            const formData = new FormData();
+                            formData.append('file', file);
+                            formData.append('description', 'Primary Image for ' + (document.getElementById('id_project_title')?.value || 'Property'));
+                            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                            
+                            const preview = document.getElementById('pageMediaPreview');
+                            const originalHTML = preview.innerHTML;
+                            preview.innerHTML = '<span class="text-primary small"><i class="fas fa-spinner fa-spin me-1"></i> Uploading...</span>';
+                            
+                            fetch('/site/admin/media/upload/json/', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.getElementById('id_media_lib').value = data.media.id;
+                                    primaryImageInput.value = '';
+                                    preview.innerHTML = `<img src="${data.media.url}" style="max-height: 100%; max-width: 100%; object-fit: contain;">`;
+                                    const clearBtn = document.getElementById('clearImageBtn');
+                                    if (clearBtn) clearBtn.style.display = 'inline-block';
+                                    alert('Primary image uploaded successfully!');
+                                } else {
+                                    preview.innerHTML = originalHTML;
+                                    alert('Upload failed: ' + data.message);
+                                }
+                            })
+                            .catch(error => {
+                                preview.innerHTML = originalHTML;
+                                alert('Error uploading file: ' + error);
+                            });
+                        } else {
+                            // User clicked Cancel, clear selection if desired or keep it for manual form submit
+                        }
+                    });
+                }
+
+                // Gallery Images Auto-upload
+                const galleryImagesInput = document.getElementById('id_extra_images');
+                if (galleryImagesInput) {
+                    galleryImagesInput.addEventListener('change', function(e) {
+                        const files = this.files;
+                        if (!files || files.length === 0) return;
+                        
+                        if (confirm(`Do you want to upload these ${files.length} gallery images immediately? (They will be saved to the Media Library and selected for this property)`)) {
+                            const uploadPromises = Array.from(files).map((file, index) => {
+                                const formData = new FormData();
+                                formData.append('file', file);
+                                formData.append('description', 'Gallery Image for ' + (document.getElementById('id_project_title')?.value || 'Property'));
+                                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                                
+                                return fetch('/site/admin/media/upload/json/', {
+                                    method: 'POST',
+                                    body: formData
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        addToGallery(data.media.id, data.media.url, data.media.name, data.media.url, 'image');
+                                        return true;
+                                    } else {
+                                        console.error('Upload failed for file ' + file.name + ': ' + data.message);
+                                        return false;
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error('Error uploading file ' + file.name + ': ', err);
+                                    return false;
+                                });
+                            });
+                            
+                            Promise.all(uploadPromises).then(results => {
+                                const successCount = results.filter(r => r === true).length;
+                                galleryImagesInput.value = '';
+                                alert(`Successfully uploaded ${successCount} of ${files.length} gallery images!`);
+                            });
+                        }
+                    });
+                }
             });
 
             function initGalleryList() {
@@ -936,16 +1079,22 @@
             function addAmenityRow(name, value) {
                 const container = document.getElementById('amenitiesContainer');
                 const div = document.createElement('div');
-                div.className = 'row g-2 align-items-center amenity-row mt-2';
+                div.className = 'row g-2 align-items-center amenity-row mt-2 pb-2 pb-md-0 border-bottom border-light-subtle';
                 div.innerHTML = `
-                    <div class="col-md-5">
-                        <input type="text" name="amenity_name[]" class="form-control" value="${name}" placeholder="Amenity/Feature Name (e.g. Square Feet)" required>
+                    <div class="col-10 col-md-10">
+                        <div class="row g-2">
+                            <div class="col-12 col-md-6">
+                                <input type="text" name="amenity_name[]" class="form-control" value="${name}" placeholder="Name (e.g. Area)" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <input type="text" name="amenity_value[]" class="form-control" value="${value}" placeholder="Value" required>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-5">
-                        <input type="text" name="amenity_value[]" class="form-control" value="${value}" placeholder="Value (e.g. 2400 sqft)" required>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-outline-danger w-100 remove-amenity-btn" onclick="removeAmenityRow(this)">Remove</button>
+                    <div class="col-2 col-md-2 d-flex align-items-center justify-content-center">
+                        <button type="button" class="btn btn-outline-danger w-100 px-0 remove-amenity-btn" onclick="removeAmenityRow(this)">
+                            <i class="bi bi-trash"></i> <span class="d-none d-md-inline">Remove</span>
+                        </button>
                     </div>
                 `;
                 container.appendChild(div);

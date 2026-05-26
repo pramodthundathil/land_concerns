@@ -934,8 +934,6 @@ def create_project(request):
         order = request.POST.get('order', 0)
 
         primary_image = request.FILES.get('primary_image')
-        plan_image_1 = request.FILES.get('plan_image_1')
-        plan_image_2 = request.FILES.get('plan_image_2')
 
         # Save project to the database
         new_project = Projects.objects.create(
@@ -946,8 +944,6 @@ def create_project(request):
             project_status=project_status,
             is_featured_product=is_featured_product,
             primary_image=primary_image,
-            plan_image_1=plan_image_1,
-            plan_image_2=plan_image_2,
             order=order,
         )
         new_project.save()
@@ -1001,10 +997,6 @@ def ProjectSingleAdmin(request,pk):
 
         if 'primary_image' in request.FILES:
             project.primary_image = request.FILES['primary_image']
-        if 'plan_image_1' in request.FILES:
-            project.plan_image_1 = request.FILES['plan_image_1']
-        if 'plan_image_2' in request.FILES:
-            project.plan_image_2 = request.FILES['plan_image_2']
 
         project.save()
 
@@ -1021,11 +1013,7 @@ def ProjectSingleAdmin(request,pk):
 def DeleteProject(request,pk):
     pro = Projects.objects.get(id = pk)
     if pro.primary_image:
-        pro.primary_image.delete()
-    if pro.plan_image_1:
-        pro.plan_image_1.delete()
-    if pro.plan_image_2:
-        pro.plan_image_2.delete()
+        pro.primary_image.delete(save=False)
     pro.delete()
     messages.info(request,"Product Deleted success.....")
         # Redirect to a success page or project list after saving

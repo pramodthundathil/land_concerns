@@ -111,22 +111,22 @@
     <!-- Sticky Navigation Bar -->
     <header x-data="{ scrolled: false, mobileMenuOpen: false }" 
             x-init="window.addEventListener('scroll', () => { scrolled = window.scrollY > 50 })"
-            :class="scrolled ? 'glass-header-scrolled py-3' : 'glass-header py-5'"
+            :class="scrolled ? 'glass-header-scrolled py-2 md:py-3' : 'glass-header py-3 md:py-5'"
             class="fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
                 
                 <!-- Logo Branding -->
-                <a href="{% url 'Index' %}" class="flex items-center space-x-3 group">
+                <a href="{% url 'Index' %}" class="flex items-center space-x-2 md:space-x-3 group">
                     <!-- Image Logo -->
-                    <div class="relative w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center p-1 transform group-hover:scale-105 transition-all duration-300">
+                    <div class="relative w-10 h-10 md:w-12 md:h-12 bg-white rounded-lg md:rounded-xl shadow-md flex items-center justify-center p-1 transform group-hover:scale-105 transition-all duration-300">
                         <img src="{% static 'asset/images/logos/logo_lc.png' %}" alt="Land Concern's Logo" class="w-full h-full object-contain">
                     </div>
                     <div class="flex flex-col">
-                        <span class="font-serif text-2xl font-bold tracking-tight text-white transition-colors duration-300 group-hover:text-brand-gold">
+                        <span class="font-serif text-lg sm:text-xl md:text-2xl font-bold tracking-tight text-white transition-colors duration-300 group-hover:text-brand-gold leading-tight">
                             Land <span class="text-brand-green">Concern's</span>
                         </span>
-                        <span class="text-[9px] uppercase tracking-[0.25em] text-white opacity-85">
+                        <span class="text-[8px] md:text-[9px] uppercase tracking-[0.2em] md:tracking-[0.25em] text-white opacity-85">
                             RealEstate People
                         </span>
                     </div>

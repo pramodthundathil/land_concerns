@@ -58,26 +58,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Plan Image 1</th>
-                        <td>
-                            <input type="file" class="form-control" name="plan_image_1">
-                            {% if project.plan_image_1 %}
-                            <img src="{{ project.plan_image_1.url }}" class="img-thumbnail mt-2" alt="Plan Image 1"
-                                style="width: 100px;">
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Plan Image 2</th>
-                        <td>
-                            <input type="file" class="form-control" name="plan_image_2">
-                            {% if project.plan_image_2 %}
-                            <img src="{{ project.plan_image_2.url }}" class="img-thumbnail mt-2" alt="Plan Image 2"
-                                style="width: 100px;">
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
                         <th>Project Category</th>
                         <td>
                             <select class="form-select" name="project_category">

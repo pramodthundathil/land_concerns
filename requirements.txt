@@ -2,7 +2,6 @@ Django>=6.0,<7.0
 django-storages
 boto3
 botocore
-django-ckeditor
 django-ckeditor-5
 python-decouple
 pillow

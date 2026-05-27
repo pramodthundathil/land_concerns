@@ -86,7 +86,16 @@ class Projects(models.Model):
     def save(self, *args, **kwargs):
         self.project_status = "Completed"
         if not self.slug:
-            self.slug = slugify(self.project_title)[:255]
+            original_slug = slugify(self.project_title)[:240]
+            slug = original_slug
+            counter = 1
+            queryset = self.__class__.objects.all()
+            if self.pk:
+                queryset = queryset.exclude(pk=self.pk)
+            while queryset.filter(slug=slug).exists():
+                slug = f"{original_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -238,7 +247,16 @@ class Services(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            original_slug = slugify(self.title)[:240]
+            slug = original_slug
+            counter = 1
+            queryset = self.__class__.objects.all()
+            if self.pk:
+                queryset = queryset.exclude(pk=self.pk)
+            while queryset.filter(slug=slug).exists():
+                slug = f"{original_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):

@@ -40,6 +40,7 @@ urlpatterns = [
     # admin urls
     path("SignIn/",views.SignIn,name="Signin"),
     path("Adminstration",views.Adminstration,name="Adminstration"),
+    path("Adminstration/change-password/", views.change_password, name="change_password"),
     path("HomePageEdits",views.HomePageEdits,name="HomePageEdits"),
     path('BlogeEdits', views.BlogeEdits, name='BlogeEdits'),
     path('GalleryEdits', views.GalleryEdits, name='GalleryEdits'),

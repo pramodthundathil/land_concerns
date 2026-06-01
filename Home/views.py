@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from .models import *
 from .forms import *
@@ -525,13 +526,15 @@ def Jobapplication(request,pk):
 
 
 def SignIn(request):
+    if request.user.is_authenticated:
+        return redirect('Adminstration')
     if request.method == "POST":
         uname = request.POST['uname']
         pswd = request.POST['pswd']
     
         user = authenticate(request,username = uname, password = pswd)
         if user is not None:
-            user = login(request,user)
+            login(request,user)
             return redirect('Adminstration')
         else:
             messages.error(request,"username or password in correct")
@@ -543,6 +546,27 @@ def SignIn(request):
 def SignOut(request):
     logout(request)
     return redirect("Index")
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('Adminstration')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = PasswordChangeForm(request.user)
+        
+    for field in form.fields.values():
+        field.widget.attrs.update({'class': 'form-control'})
+        
+    return render(request, 'dashboard/change_password.html', {
+        'form': form
+    })
 
 @login_required
 def Adminstration(request):

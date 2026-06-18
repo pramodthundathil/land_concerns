@@ -1,3 +1,4 @@
+from django.db import IntegrityError, transaction
 from .models import Visitor
 from django.utils import timezone
 
@@ -7,11 +8,16 @@ class VisitorMiddleware:
 
     def __call__(self, request):
         ip_address = self.get_client_ip(request)
-        today = timezone.now().date()
+        today = timezone.localdate()
         
         # Check if this IP has visited today
         if not Visitor.objects.filter(ip_address=ip_address, visit_date=today).exists():
-            Visitor.objects.create(ip_address=ip_address)
+            try:
+                with transaction.atomic():
+                    Visitor.objects.create(ip_address=ip_address)
+            except IntegrityError:
+                # Handle concurrent request creating the same visitor record
+                pass
 
         response = self.get_response(request)
         return response

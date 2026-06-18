@@ -45,3 +45,48 @@ class SlugUniqueTestCase(TestCase):
             description="Service Description"
         )
         self.assertEqual(s2.slug, "premium-architecture-1")
+
+class VisitorMiddlewareTestCase(TestCase):
+    def setUp(self):
+        from django.test import RequestFactory
+        from Home.middleware import VisitorMiddleware
+        self.factory = RequestFactory()
+        self.middleware = VisitorMiddleware(get_response=lambda r: None)
+
+    def test_first_visit_creates_record(self):
+        from Home.models import Visitor
+        request = self.factory.get('/')
+        self.middleware(request)
+        self.assertEqual(Visitor.objects.count(), 1)
+
+    def test_sequential_visits_reuses_record(self):
+        from Home.models import Visitor
+        request = self.factory.get('/')
+        self.middleware(request)
+        self.middleware(request)
+        self.assertEqual(Visitor.objects.count(), 1)
+
+    def test_concurrent_visits_race_condition(self):
+        from unittest.mock import patch
+        from Home.models import Visitor
+        request = self.factory.get('/')
+        
+        # Mock filter().exists() to always return False to simulate a race condition
+        # where two concurrent threads check the database at the same time and both see no record.
+        with patch('Home.models.Visitor.objects.filter') as mock_filter:
+            mock_filter.return_value.exists.return_value = False
+            
+            # The first call will create the record.
+            self.middleware(request)
+            self.assertEqual(Visitor.objects.count(), 1)
+            
+            # The second call will also try to create the record because filter().exists() is mocked to False.
+            # Because of the database unique constraint, django will raise an IntegrityError inside
+            # Visitor.objects.create, which the middleware should catch and handle.
+            try:
+                self.middleware(request)
+            except Exception as e:
+                self.fail(f"VisitorMiddleware failed to handle the concurrent request: {e}")
+            
+            # Count should still be 1
+            self.assertEqual(Visitor.objects.count(), 1)

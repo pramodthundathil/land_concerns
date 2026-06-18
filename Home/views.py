@@ -579,7 +579,7 @@ def Adminstration(request):
     
     # Visitor Analytics
     from datetime import timedelta
-    today = timezone.now().date()
+    today = timezone.localdate()
     today_visitors = Visitor.objects.filter(visit_date=today).count()
     
     # Last 7 days chart data
